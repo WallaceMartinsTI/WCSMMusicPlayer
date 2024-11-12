@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- OTHER COLORS -->
+    <color name="blueTitle">#004aad</color>
+
+    <!-- LIGHT THEME COLORS -->
+    <!-- Primary colors (Base colors) -->
+    <color name="primary">#6699cc</color>
+    <color name="primary_variant">#336699</color>
+    <color name="secondary">#4caf9b</color>
+    <color name="secondary_variant">#2e7d6a</color>
+    <color name="tertiary">#ffcc80</color>
+
+    <!-- On Colors (Contrast) -->
+    <color name="on_primary">#ffffff</color>
+    <color name="on_secondary">#ffffff</color>
+    <color name="on_tertiary">#000000</color>
+
+    <!-- Background Colors -->
+    <color name="background">#cdffd8</color>
+    <color name="surface">#ffffff</color>
+    <color name="on_background">#263238</color>
+    <color name="on_surface">#37474f</color>
+
+    <!-- Error Colors -->
+    <color name="error">#f44336</color>
+    <color name="on_error">#ffffff</color>
+
+    <!-- DARK THEME COLORS -->
+    <!-- Primary colors -->
+    <color name="primary_dark">#80b3ff</color>
+    <color name="primary_variant_dark">#5581cc</color>
+    <color name="secondary_dark">#73e6be</color>
+    <color name="secondary_variant_dark">#46897b</color>
+    <color name="tertiary_dark">#ffb366</color>
+
+    <!-- On Colors (Contrast) -->
+    <color name="on_primary_dark">#000000</color>
+    <color name="on_secondary_dark">#000000</color>
+    <color name="on_tertiary_dark">#000000</color>
+
+    <!-- Background Colors -->
+    <color name="background_dark">#1b1f23</color>
+    <color name="surface_dark">#121212</color>
+    <color name="on_background_dark">#ffffff</color>
+    <color name="on_surface_dark">#e0e0e0</color>
+
+    <!-- Error Colors -->
+    <color name="error_dark">#cf6679</color>
+    <color name="on_error_dark">#000000</color>
+</resources>
