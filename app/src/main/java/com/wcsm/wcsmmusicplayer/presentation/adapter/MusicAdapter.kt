@@ -1,5 +1,6 @@
 package com.wcsm.wcsmmusicplayer.presentation.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
@@ -14,6 +15,7 @@ class MusicAdapter(
 
     private var musicsList = emptyList<Music>()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateMusicsList(musicTests: List<Music>) {
         musicsList = musicTests
         notifyDataSetChanged()

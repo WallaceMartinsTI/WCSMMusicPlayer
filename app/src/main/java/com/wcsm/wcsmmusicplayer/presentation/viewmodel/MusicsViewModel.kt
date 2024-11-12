@@ -47,12 +47,23 @@ class MusicsViewModel @Inject constructor(
     fun playMusic(context: Context, uri: Uri) {
         if(mediaPlayer == null) {
             initMediaPlayer(context, uri)
+        } else {
+            stopPlayingMusic()
+            initMediaPlayer(context, uri)
         }
         mediaPlayer?.start()
     }
 
     fun turnOffMediaPlayer() {
         if(mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
+        }
+    }
+
+    private fun stopPlayingMusic() {
+        if(mediaPlayer?.isPlaying == true) {
             mediaPlayer?.stop()
             mediaPlayer?.release()
             mediaPlayer = null

@@ -71,39 +71,40 @@ class MusicMediaStore(
                 val mimeType = cursor.getString(mimeTypeColumn) ?: "Unknown MimeType"
                 val year = cursor.getString(yearColumn) ?: "Unknown Year"
 
-                val contentUri: Uri = ContentUris.withAppendedId(
-                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                    id
-                )
+                // Check if music file exists
+                val file = File(data)
+                if (!file.exists()) continue
 
                 val retriever = MediaMetadataRetriever()
-                retriever.setDataSource(data)
-                val album = retriever.extractMetadata(
-                    MediaMetadataRetriever.METADATA_KEY_ALBUM
-                ) ?: "Unknown Album"
-                retriever.release()
+                try {
+                    retriever.setDataSource(data)
+                    val album = retriever.extractMetadata(
+                        MediaMetadataRetriever.METADATA_KEY_ALBUM
+                    ) ?: "Unknown Album"
 
+                    val contentUri: Uri = ContentUris.withAppendedId(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        id
+                    )
 
-                val musicFromDevice = MusicFromDevice(
-                    uri = contentUri,
-                    title = title,
-                    artist = artist,
-                    data = data,
-                    duration = duration,
-                    album = album,
-                    size = size,
-                    mimeType = mimeType,
-                    year = year
-                )
+                    val musicFromDevice = MusicFromDevice(
+                        uri = contentUri,
+                        title = title,
+                        artist = artist,
+                        data = data,
+                        duration = duration,
+                        album = album,
+                        size = size,
+                        mimeType = mimeType,
+                        year = year
+                    )
 
-                Log.i("#-# TESTE #-#", "fetchMusicsFromDevice - whileCursor.moveNext()")
-                Log.i("#-# TESTE #-#", "musicFromDevice: $musicFromDevice")
-
-                // Check if music file exists
-                val filePath = musicFromDevice.data
-                val file = File(filePath)
-                if (file.exists()) {
                     musicsList += musicFromDevice
+
+                } catch (e: IllegalArgumentException) {
+                    Log.w("MusicMediaStore", "Error configuring MediaMetadataRetriever for $data")
+                } finally {
+                    retriever.release()
                 }
             }
         }
