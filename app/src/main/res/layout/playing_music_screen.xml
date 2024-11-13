@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/app_background_gradient_inverted"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/top_border"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_playing_24" />
+
+    <TextView
+        android:id="@+id/playingMusicTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Eminem - Not Afraid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <TextView
+        android:id="@+id/playingMusicArtist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Eminem"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/imageView2" />
+
+    <TextView
+        android:id="@+id/playingMusicAlbum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Unknown Album"
+        app:layout_constraintBottom_toBottomOf="@+id/playingMusicArtist"
+        app:layout_constraintStart_toEndOf="@+id/playingMusicArtist"
+        app:layout_constraintTop_toTopOf="@+id/playingMusicArtist" />
+
+    <TextView
+        android:id="@+id/playingMusicDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="04:18"
+        app:layout_constraintBottom_toBottomOf="@+id/playingMusicAlbum"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/playingMusicAlbum" />
+
+    <TextView
+        android:id="@+id/playingMusicAtualTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="01:14"
+        app:layout_constraintStart_toStartOf="@+id/seekBar"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+
+    <TextView
+        android:id="@+id/playingMusicTotalDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="03:12"
+        app:layout_constraintEnd_toEndOf="@+id/seekBar"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+
+    <ImageView
+        android:id="@+id/playingMusicLoop"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/playingMusicPlayPause"
+        app:layout_constraintEnd_toStartOf="@+id/playingMusicPrevious"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/playingMusicPlayPause"
+        app:srcCompat="@drawable/ic_loop_24" />
+
+    <ImageView
+        android:id="@+id/playingMusicPrevious"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/playingMusicPlayPause"
+        app:layout_constraintEnd_toStartOf="@+id/playingMusicPlayPause"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/playingMusicLoop"
+        app:layout_constraintTop_toTopOf="@+id/playingMusicPlayPause"
+        app:srcCompat="@drawable/ic_previous_24" />
+
+    <ImageView
+        android:id="@+id/playingMusicPlayPause"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/playingMusicNext"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/playingMusicPrevious"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+        app:srcCompat="@drawable/ic_play_24" />
+
+    <ImageView
+        android:id="@+id/playingMusicNext"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/playingMusicPlayPause"
+        app:layout_constraintEnd_toStartOf="@+id/playingMusicStop"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/playingMusicPlayPause"
+        app:layout_constraintTop_toTopOf="@+id/playingMusicPlayPause"
+        app:srcCompat="@drawable/ic_next_24" />
+
+    <ImageView
+        android:id="@+id/playingMusicStop"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/playingMusicNext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/playingMusicNext"
+        app:layout_constraintTop_toTopOf="@+id/playingMusicNext"
+        app:srcCompat="@drawable/ic_stop_24" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,6 +37,8 @@ class MusicsActivity : AppCompatActivity() {
         binding.btnOpenPlaylistsFragment.setOnClickListener {
             initPlaylistsFragment()
         }
+
+        //binding.playingMusicInclude
     }
 
     private fun initMusicsFragment() {
