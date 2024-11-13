@@ -69,9 +69,9 @@ class MusicRepositoryImplTest {
     @Test
     fun `getMusics should return list of musics - mock`() = runTest {
         val mockMusicFromDeviceLists = listOf(
-            MusicFromDevice(uriMock1, "Musica 1", "Artista 1", "storage/1", 23948, "Album 1", "Size 1", "MimeType 1", "Year 1", "Writer 1", "Resolution 1"),
-            MusicFromDevice(uriMock2, "Musica 2", "Artista 2", "storage/2", 23741, "Album 2", "Size 2", "MimeType 2", "Year 2", "Writer 2", "Resolution 2"),
-            MusicFromDevice(uriMock3, "Musica 3", "Artista 3", "storage/3", 23371, "Album 3", "Size 3", "MimeType 3", "Year 3", "Writer 3", "Resolution 3")
+            MusicFromDevice(uriMock1, "Musica 1", "Artista 1", "storage/1", 23948, "Album 1", "Size 1", "MimeType 1", "Year 1"),
+            MusicFromDevice(uriMock2, "Musica 2", "Artista 2", "storage/2", 23741, "Album 2", "Size 2", "MimeType 2", "Year 2"),
+            MusicFromDevice(uriMock3, "Musica 3", "Artista 3", "storage/3", 23371, "Album 3", "Size 3", "MimeType 3", "Year 3")
         )
 
         Mockito.`when`(musicMediaStoreMock.fetchMusicsFromDevice()).thenReturn (mockMusicFromDeviceLists)

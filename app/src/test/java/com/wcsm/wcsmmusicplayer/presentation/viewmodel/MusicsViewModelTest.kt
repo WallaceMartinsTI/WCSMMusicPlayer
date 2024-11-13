@@ -4,9 +4,14 @@ import android.net.Uri
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.wcsm.wcsmmusicplayer.domain.model.Music
-import com.wcsm.wcsmmusicplayer.domain.usecase.GetMusicsUseCase
-import com.wcsm.wcsmmusicplayer.domain.usecase.GetMusicsUseCaseFake
+import com.wcsm.wcsmmusicplayer.domain.usecase.getmusics.GetMusicsUseCase
+import com.wcsm.wcsmmusicplayer.domain.usecase.getmusics.GetMusicsUseCaseFake
+import com.wcsm.wcsmmusicplayer.domain.usecase.getnextmusic.GetNextMusicUseCase
+import com.wcsm.wcsmmusicplayer.domain.usecase.getnextmusic.GetNextMusicUseCaseFake
+import com.wcsm.wcsmmusicplayer.domain.usecase.getpreviousmusic.GetPreviousMusicUseCase
+import com.wcsm.wcsmmusicplayer.domain.usecase.getpreviousmusic.GetPreviousMusicUseCaseFake
 import com.wcsm.wcsmmusicplayer.util.getOrAwaitValue
+import com.wcsm.wcsmmusicplayer.util.musicsList
 import kotlinx.coroutines.test.runTest
 
 import org.junit.Before
@@ -27,25 +32,39 @@ class MusicsViewModelTest {
     // Mock
     @Mock
     private lateinit var getMusicsUseCaseMock: GetMusicsUseCase
+    @Mock
+    private lateinit var getNextMusicUseCaseMock: GetNextMusicUseCase
+    @Mock
+    private lateinit var getPreviousMusicUseCaseMock: GetPreviousMusicUseCase
     private lateinit var musicsViewModelMock: MusicsViewModel
 
     // Fake
     private lateinit var getMusicsUseCaseFake: GetMusicsUseCaseFake
-    private lateinit var musicsViewModelFake: MusicsViewModel
+    private lateinit var getNextMusicUseCaseFake: GetNextMusicUseCaseFake
+    private lateinit var getPreviousMusicUseCaseFake: GetPreviousMusicUseCaseFake
 
-    private val uriMock1 = Mockito.mock(Uri::class.java)
-    private val uriMock2 = Mockito.mock(Uri::class.java)
-    private val uriMock3 = Mockito.mock(Uri::class.java)
+    private lateinit var musicsViewModelFake: MusicsViewModel
 
     @Before
     fun setUp() {
         // Mock
         MockitoAnnotations.openMocks(this)
-        musicsViewModelMock = MusicsViewModel(getMusicsUseCaseMock)
+        musicsViewModelMock = MusicsViewModel(
+            getMusicsUseCaseMock,
+            getNextMusicUseCaseMock,
+            getPreviousMusicUseCaseMock
+        )
 
         // Fake
         getMusicsUseCaseFake = GetMusicsUseCaseFake()
-        musicsViewModelFake = MusicsViewModel(getMusicsUseCaseFake)
+        getNextMusicUseCaseFake = GetNextMusicUseCaseFake()
+        getPreviousMusicUseCaseFake = GetPreviousMusicUseCaseFake()
+
+        musicsViewModelFake = MusicsViewModel(
+            getMusicsUseCaseFake,
+            getNextMusicUseCaseFake,
+            getPreviousMusicUseCaseFake
+        )
     }
 
     // Fake
@@ -60,13 +79,7 @@ class MusicsViewModelTest {
     // Mock
     @Test
     fun `getMusics should fill musics live data value with the musics list - mock`() = runTest {
-        Mockito.`when`(getMusicsUseCaseMock()).thenReturn(
-            listOf(
-                Music(uriMock1, "Musica 1", "Artista 1", 23948, "Album 1"),
-                Music(uriMock2, "Musica 2", "Artista 2", 23741, "Album 2"),
-                Music(uriMock3, "Musica 3", "Artista 3", 23371, "Album 3")
-            )
-        )
+        Mockito.`when`(getMusicsUseCaseMock()).thenReturn(musicsList)
 
         musicsViewModelMock.getMusics()
         val liveData = musicsViewModelMock.musics.getOrAwaitValue()

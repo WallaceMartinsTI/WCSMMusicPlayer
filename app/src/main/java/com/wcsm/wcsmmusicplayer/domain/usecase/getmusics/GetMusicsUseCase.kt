@@ -1,4 +1,4 @@
-package com.wcsm.wcsmmusicplayer.domain.usecase
+package com.wcsm.wcsmmusicplayer.domain.usecase.getmusics
 
 import com.wcsm.wcsmmusicplayer.domain.model.Music
 import com.wcsm.wcsmmusicplayer.domain.repository.IMusicRepository
@@ -9,7 +9,6 @@ class GetMusicsUseCase @Inject constructor(
 ) : IGetMusicsUseCase {
 
     override suspend operator fun invoke() : List<Music> {
-        // Business Rules Here ...
         return musicRepository.getMusicsFromData()
     }
 

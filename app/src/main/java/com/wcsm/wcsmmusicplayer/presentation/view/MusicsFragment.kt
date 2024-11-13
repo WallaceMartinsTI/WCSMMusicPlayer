@@ -1,13 +1,11 @@
 package com.wcsm.wcsmmusicplayer.presentation.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +22,7 @@ class MusicsFragment : Fragment() {
 
     private lateinit var musicAdapter: MusicAdapter
 
-    private val musicsViewModel by viewModels<MusicsViewModel>()
+    private val musicsViewModel by activityViewModels<MusicsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,19 +31,18 @@ class MusicsFragment : Fragment() {
     ): View {
         _binding = FragmentMusicsBinding.inflate(inflater, container, false)
 
-        musicAdapter = MusicAdapter { music ->
-            //val filePath = "/storage/emulated/0/Download/Line Of Fire - Audionautix (1).mp3"
-            Log.i("#-# TESTE #-#", "onClick ADAPTER - music: $music")
-            //initMediaPlayer(music.uri)
-            //mediaPlayer?.start()
-
-            musicsViewModel.playMusic(requireContext(), music.uri)
-
+        musicAdapter = MusicAdapter(requireContext()) { music ->
+            musicsViewModel.startMusic(requireContext(), music)
         }
 
         musicsViewModel.musics.observe(viewLifecycleOwner) { musics ->
-            Log.i("#-# TESTE #-#", "Chamou OBSERVE")
             musicAdapter.updateMusicsList(musics)
+        }
+
+        musicsViewModel.playingMusic.observe(viewLifecycleOwner) { playingMusic ->
+            if(playingMusic != null) {
+                musicAdapter.updateCurrentMusic(playingMusic)
+            }
         }
 
         binding.rvMusic.adapter = musicAdapter
