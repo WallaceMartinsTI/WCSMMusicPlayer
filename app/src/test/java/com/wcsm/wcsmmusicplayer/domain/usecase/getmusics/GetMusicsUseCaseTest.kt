@@ -7,6 +7,7 @@ import com.wcsm.wcsmmusicplayer.domain.model.Music
 import com.wcsm.wcsmmusicplayer.domain.repository.MusicRepositoryImplFake
 import com.wcsm.wcsmmusicplayer.util.musicsList
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 
 import org.junit.Before
 import org.junit.Test

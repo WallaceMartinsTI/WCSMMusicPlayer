@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.view.MusicsActivity">
+    tools:context=".presentation.view.activity.MusicsActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -27,6 +27,7 @@
             android:layout_marginRight="16dp"
             android:layout_weight="1"
             android:drawableLeft="@drawable/ic_music_24"
+            android:drawableTint="@color/white"
             android:text="MÚSICAS" />
 
         <Button
@@ -50,7 +51,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcvMusics"
-        android:name="com.wcsm.wcsmmusicplayer.presentation.view.MusicsFragment"
+        android:name="com.wcsm.wcsmmusicplayer.presentation.view.fragment.MusicsFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"

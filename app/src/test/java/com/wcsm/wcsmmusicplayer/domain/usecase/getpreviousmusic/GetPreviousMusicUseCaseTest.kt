@@ -47,7 +47,7 @@ class GetPreviousMusicUseCaseTest {
 
     @Test
     fun `should return error when music is not found`() {
-        val currentMusic = Music(uriMock2,"Musica 9","Artista 9", 23948, "Album 9")
+        val currentMusic = Music(uriMock2,"Musica 9","Artista 9", 23948, "Album 9", emptyList())
 
         val result = getPreviousMusicUseCase(musicsList, currentMusic)
 

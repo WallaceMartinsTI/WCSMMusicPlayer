@@ -18,7 +18,7 @@ import java.util.Locale
 
 class MusicAdapter(
     val context: Context,
-    val onPlay: (musicTest: Music) -> Unit
+    val onClick: (musicTest: Music) -> Unit
 ) : Adapter<MusicAdapter.MusicViewHolder>() {
 
     private var musicsList = emptyList<Music>()
@@ -33,7 +33,6 @@ class MusicAdapter(
     fun updateCurrentMusic(newCurrentMusic: Music?) {
         val previousMusic = currentMusic
         currentMusic = newCurrentMusic
-        //notifyDataSetChanged()
         if (previousMusic != null) {
             val previousPosition = musicsList.indexOf(previousMusic)
             if (previousPosition != -1) {
@@ -59,7 +58,7 @@ class MusicAdapter(
             binding.textMusicDuration.text = formatDurationIntToString(music.duration)
 
             binding.clMusicItem.setOnClickListener {
-                onPlay(music)
+                onClick(music)
             }
 
             setDefaultColors()
@@ -67,15 +66,6 @@ class MusicAdapter(
             if(music.uri == currentMusic?.uri) {
                 setPlayingMusicColors()
             }
-        }
-
-        private fun setPlayingMusicColors() {
-            val playingColor = ContextCompat.getColor(context, R.color.primary)
-            binding.textMusicTitle.setTextColor(playingColor)
-            binding.ivMusic.imageTintList = ColorStateList.valueOf(playingColor)
-            binding.textMusicArtist.setTextColor(playingColor)
-            binding.textMusicAlbum.setTextColor(playingColor)
-            binding.textMusicDuration.setTextColor(playingColor)
         }
 
         fun setDefaultColors() {
@@ -87,6 +77,15 @@ class MusicAdapter(
             binding.textMusicArtist.setTextColor(defaultColor)
             binding.textMusicAlbum.setTextColor(defaultColor)
             binding.textMusicDuration.setTextColor(defaultColor)
+        }
+
+        private fun setPlayingMusicColors() {
+            val playingColor = ContextCompat.getColor(context, R.color.primary)
+            binding.textMusicTitle.setTextColor(playingColor)
+            binding.ivMusic.imageTintList = ColorStateList.valueOf(playingColor)
+            binding.textMusicArtist.setTextColor(playingColor)
+            binding.textMusicAlbum.setTextColor(playingColor)
+            binding.textMusicDuration.setTextColor(playingColor)
         }
     }
 

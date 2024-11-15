@@ -1,4 +1,4 @@
-package com.wcsm.wcsmmusicplayer.presentation.view
+package com.wcsm.wcsmmusicplayer.presentation.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,12 +9,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.wcsm.wcsmmusicplayer.presentation.adapter.MusicAdapter
 import com.wcsm.wcsmmusicplayer.databinding.FragmentMusicsBinding
+import com.wcsm.wcsmmusicplayer.presentation.adapter.MusicAdapter
 import com.wcsm.wcsmmusicplayer.presentation.viewmodel.MusicsViewModel
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MusicsFragment : Fragment() {
 
     private var _binding: FragmentMusicsBinding? = null
@@ -52,12 +50,9 @@ class MusicsFragment : Fragment() {
             DividerItemDecoration(context, RecyclerView.VERTICAL)
         )
 
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         musicsViewModel.getMusics()
+
+        return binding.root
     }
 
     override fun onDestroyView() {

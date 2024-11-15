@@ -1,4 +1,4 @@
-package com.wcsm.wcsmmusicplayer.presentation.view
+package com.wcsm.wcsmmusicplayer.presentation.view.activity
 
 import android.content.Intent
 import android.content.pm.PackageManager

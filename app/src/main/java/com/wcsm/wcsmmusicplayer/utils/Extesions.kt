@@ -9,6 +9,7 @@ fun MusicFromDevice.toMusic() : Music {
         title = this.title,
         artist = this.artist,
         duration = this.duration,
-        album = this.album
+        album = this.album,
+        playlists = emptyList()
     )
 }

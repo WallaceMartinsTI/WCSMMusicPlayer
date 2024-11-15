@@ -5,6 +5,8 @@
 
     <!-- OTHER COLORS -->
     <color name="blueTitle">#004aad</color>
+    <color name="startGradientColor">#cdffd8</color>
+    <color name="endGradientColor">#94b9ff</color>
 
     <!-- LIGHT THEME COLORS -->
     <!-- Primary colors (Base colors) -->

@@ -7,5 +7,6 @@ data class Music(
     val title: String,
     val artist: String,
     val duration: Int,
-    val album: String
+    val album: String,
+    val playlists: List<String>
 )

@@ -1,6 +1,7 @@
-package com.wcsm.wcsmmusicplayer.presentation.view
+package com.wcsm.wcsmmusicplayer.presentation.view.activity
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,18 +12,17 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.TextViewCompat.setCompoundDrawableTintList
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import androidx.fragment.app.viewModels
-import androidx.transition.Visibility
 import com.wcsm.wcsmmusicplayer.R
 import com.wcsm.wcsmmusicplayer.databinding.ActivityMusicsBinding
 import com.wcsm.wcsmmusicplayer.domain.model.Music
+import com.wcsm.wcsmmusicplayer.presentation.view.fragment.MusicsFragment
+import com.wcsm.wcsmmusicplayer.presentation.view.fragment.PlaylistsFragment
 import com.wcsm.wcsmmusicplayer.presentation.viewmodel.MusicsViewModel
 import com.wcsm.wcsmmusicplayer.utils.ReproductionModes
 import com.wcsm.wcsmmusicplayer.utils.formatDurationIntToString
@@ -206,12 +206,38 @@ class MusicsActivity : AppCompatActivity() {
         supportFragmentManager.commit {
             replace<MusicsFragment>(binding.fcvMusics.id)
         }
+        binding.btnOpenMusicsFragment.setTextColor(
+            ContextCompat.getColor(this, R.color.secondary_dark)
+        )
+        setCompoundDrawableTintList(binding.btnOpenMusicsFragment, ColorStateList.valueOf(
+            ContextCompat.getColor(this, R.color.secondary_dark)
+        ))
+
+        binding.btnOpenPlaylistsFragment.setTextColor(
+            ContextCompat.getColor(this, R.color.white)
+        )
+        setCompoundDrawableTintList(binding.btnOpenPlaylistsFragment, ColorStateList.valueOf(
+            ContextCompat.getColor(this, R.color.white)
+        ))
     }
 
     private fun initPlaylistsFragment() {
         supportFragmentManager.commit {
             replace<PlaylistsFragment>(binding.fcvMusics.id)
         }
+        binding.btnOpenPlaylistsFragment.setTextColor(
+            ContextCompat.getColor(this, R.color.secondary_dark)
+        )
+        setCompoundDrawableTintList(binding.btnOpenPlaylistsFragment, ColorStateList.valueOf(
+            ContextCompat.getColor(this, R.color.secondary_dark)
+        ))
+
+        binding.btnOpenMusicsFragment.setTextColor(
+            ContextCompat.getColor(this, R.color.white)
+        )
+        setCompoundDrawableTintList(binding.btnOpenMusicsFragment, ColorStateList.valueOf(
+            ContextCompat.getColor(this, R.color.white)
+        ))
     }
 
     private fun startUpdatingCurrentTime() {

@@ -5,7 +5,9 @@
     android:id="@+id/clPlayingMusicScreen"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/app_background_gradient_inverted">
+    android:background="@drawable/app_background_gradient_inverted"
+    android:visibility="gone"
+    tools:visibility="visible">
 
     <View
         android:id="@+id/top_border"

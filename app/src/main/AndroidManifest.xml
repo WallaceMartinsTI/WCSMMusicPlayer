@@ -20,13 +20,13 @@
         android:theme="@style/Theme.WCSMMusicPlayer"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.view.WelcomeActivity"
+            android:name=".presentation.view.activity.WelcomeActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.view.MusicsActivity"
+            android:name=".presentation.view.activity.MusicsActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.view.MainActivity"
+            android:name=".presentation.view.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
