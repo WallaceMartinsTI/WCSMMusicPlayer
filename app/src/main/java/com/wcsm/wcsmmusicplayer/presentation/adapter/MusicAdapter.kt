@@ -3,7 +3,6 @@ package com.wcsm.wcsmmusicplayer.presentation.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -12,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.wcsm.wcsmmusicplayer.R
 import com.wcsm.wcsmmusicplayer.databinding.MusicItemBinding
 import com.wcsm.wcsmmusicplayer.domain.model.Music
-import com.wcsm.wcsmmusicplayer.utils.formatDurationIntToString
+import com.wcsm.wcsmmusicplayer.util.formatDurationIntToString
 
 class MusicAdapter(
     val context: Context,
@@ -52,14 +51,8 @@ class MusicAdapter(
         //Log.i("#-# TESTE #-#", "onClick - musicsToBeAddedToPlaylist: $listToLog")
     }
 
-    fun getNewPlaylistMusics() : List<Music>? {
-        val musicToPlaylist = musicsToBeAddedToPlaylist
-
-        return if(musicToPlaylist.isNotEmpty()) {
-            musicToPlaylist.toList()
-        } else {
-            null
-        }
+    fun getNewPlaylistMusics() : List<Music> {
+        return musicsToBeAddedToPlaylist.toList()
     }
 
     fun updateCurrentMusic(newCurrentMusic: Music?) {

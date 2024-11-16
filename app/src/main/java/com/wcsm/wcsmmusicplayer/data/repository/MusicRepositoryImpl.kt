@@ -3,7 +3,7 @@ package com.wcsm.wcsmmusicplayer.data.repository
 import com.wcsm.wcsmmusicplayer.data.mediastore.IMusicMediaStore
 import com.wcsm.wcsmmusicplayer.domain.model.Music
 import com.wcsm.wcsmmusicplayer.domain.repository.IMusicRepository
-import com.wcsm.wcsmmusicplayer.utils.toMusic
+import com.wcsm.wcsmmusicplayer.data.util.toMusic
 import javax.inject.Inject
 
 class MusicRepositoryImpl @Inject constructor(

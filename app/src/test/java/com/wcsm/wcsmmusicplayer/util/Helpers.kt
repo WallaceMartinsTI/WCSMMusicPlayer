@@ -14,12 +14,12 @@ val uriMock5: Uri  = Mockito.mock(Uri::class.java)
 val uriMock6: Uri  = Mockito.mock(Uri::class.java)
 
 val musicsList = listOf(
-    Music(uriMock1, "Musica 1", "Artista 1", 23948, "Album 1", emptyList()),
-    Music(uriMock2, "Musica 2", "Artista 2", 23741, "Album 2", emptyList()),
-    Music(uriMock3, "Musica 3", "Artista 3", 23371, "Album 3", emptyList()),
-    Music(uriMock4, "Musica 4", "Artista 4", 23371, "Album 4", emptyList()),
-    Music(uriMock5, "Musica 5", "Artista 5", 23371, "Album 5", emptyList()),
-    Music(uriMock6, "Musica 6", "Artista 6", 23371, "Album 6", emptyList())
+    Music("uri1", "Musica 1", "Artista 1", 23948, "Album 1", emptyList()),
+    Music("uri2", "Musica 2", "Artista 2", 23741, "Album 2", emptyList()),
+    Music("uri3", "Musica 3", "Artista 3", 23371, "Album 3", emptyList()),
+    Music("uri4", "Musica 4", "Artista 4", 23371, "Album 4", emptyList()),
+    Music("uri5", "Musica 5", "Artista 5", 23371, "Album 5", emptyList()),
+    Music("uri6", "Musica 6", "Artista 6", 23371, "Album 6", emptyList())
 )
 
 val musicsFromDeviceList = listOf(

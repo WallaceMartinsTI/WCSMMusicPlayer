@@ -1,6 +1,7 @@
 package com.wcsm.wcsmmusicplayer.presentation.adapter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
@@ -22,20 +23,23 @@ class PlaylistAdapter(
         notifyDataSetChanged()
     }
 
+    init {
+        Log.i("#-# TESTE #-#", "PLAYLIST ADAPTER INIT")
+    }
+
     inner class PlaylistViewHolder(
         private val binding: PlaylistItemBinding
     ) : ViewHolder(binding.root) {
         fun bind(playlist: Playlist) {
             binding.itemPlaylistName.text = playlist.title
             binding.itemPlaylistMusics.text = playlist.musics.size.toString()
-            //binding.itemPlaylistMusics.text = playlist.musics.musics.size.toString()
 
             binding.itemPlaylistBtnEdit.setOnClickListener {
                 onEdit()
             }
 
             binding.itemPlaylistBtnDelete.setOnClickListener {
-                onDelete
+                onDelete()
             }
 
             binding.cdPlaylistItem.setOnClickListener {

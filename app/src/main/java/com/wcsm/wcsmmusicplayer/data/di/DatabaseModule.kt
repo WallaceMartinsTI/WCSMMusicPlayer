@@ -1,4 +1,4 @@
-package com.wcsm.wcsmmusicplayer.di
+package com.wcsm.wcsmmusicplayer.data.di
 
 import android.content.Context
 import androidx.room.Room

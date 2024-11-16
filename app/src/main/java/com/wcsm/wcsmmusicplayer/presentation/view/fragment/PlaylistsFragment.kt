@@ -1,20 +1,24 @@
 package com.wcsm.wcsmmusicplayer.presentation.view.fragment
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.wcsm.wcsmmusicplayer.R
 import com.wcsm.wcsmmusicplayer.databinding.CreatePlaylistModalBinding
 import com.wcsm.wcsmmusicplayer.databinding.FragmentPlaylistsBinding
 import com.wcsm.wcsmmusicplayer.domain.model.Playlist
+import com.wcsm.wcsmmusicplayer.domain.usecase.PlaylistResult
 import com.wcsm.wcsmmusicplayer.presentation.adapter.MusicAdapter
 import com.wcsm.wcsmmusicplayer.presentation.adapter.PlaylistAdapter
 import com.wcsm.wcsmmusicplayer.presentation.viewmodel.MusicsViewModel
@@ -31,6 +35,8 @@ class PlaylistsFragment : Fragment() {
     private val musicsViewModel by activityViewModels<MusicsViewModel>()
 
     private val playlistsViewModel by activityViewModels<PlaylistsViewModel>()
+
+    private var createPlaylistErrorMessage: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,12 +63,24 @@ class PlaylistsFragment : Fragment() {
             Log.i("#-# TESTE #-#", "PLAYLIST-OBSERVE: playlist: $playlists")
             if(playlists != null) {
                 if(playlists.isNotEmpty()) {
+                    playlistAdapter.updatePlaylistsList(playlists)
                     handleNoPlaylistViews(true)
                 } else {
                     handleNoPlaylistViews(false)
                 }
             }
         }
+
+            /*val (isSuccess, message) = crudActionResponse
+            if(isSuccess) {
+                // Salvou a playlist com sucesso... fazer algo...
+                showToastMessage(message)
+                createPlaylistErrorMessage = null
+            } else {
+                createPlaylistErrorMessage = message
+            }*/
+
+
 
         binding.rvPlaylists.adapter = playlistAdapter
         binding.rvPlaylists.layoutManager = LinearLayoutManager(context)
@@ -129,14 +147,56 @@ class PlaylistsFragment : Fragment() {
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         binding.fabSaveNewPlaylist.setOnClickListener {
+            binding.modalPlaylistInputLayout.error = null
+            binding.modalPlaylistErrorMessage.error = null
+            binding.rvMusicsToAddToPlaylist.setBackgroundResource(R.drawable.recycler_view_border)
+
             val musicsList = musicAdapter.getNewPlaylistMusics()
-            if(musicsList != null) {
-                val playlistName = binding.modalPlaylistName.text.toString()
-                // SE PASSAR NA VALIDACAO DO NOME DA PLAYLIST
-                //val musics = MusicsList(musicsList)
-                //val newPlaylist = Playlist(title = playlistName, musics =  musics)
-                val newPlaylist = Playlist(title = playlistName, musics =  musicsList)
-                playlistsViewModel.savePlaylist(newPlaylist)
+            val playlistName = binding.modalPlaylistName.text.toString()
+
+            val newPlaylist = Playlist(title = playlistName, musics =  musicsList)
+
+            playlistsViewModel.savePlaylist(newPlaylist)
+        }
+
+        playlistsViewModel.crudActionResponse.observe(viewLifecycleOwner) { result ->
+            if(result != null) {
+                when (result) {
+                    is PlaylistResult.Success -> {
+                        showToastMessage(result.message)
+                        binding.modalPlaylistInputLayout.error = null
+                        binding.rvMusicsToAddToPlaylist.setBackgroundResource(R.drawable.recycler_view_border)
+                        // FAZER O DISSMISS
+                        dialog.dismiss()
+                    }
+                    is PlaylistResult.Error -> {
+                        when(result.type) {
+                            PlaylistResult.ErrorType.INVALID_TITLE -> {
+                                binding.modalPlaylistErrorMessage.text = null
+                                binding.rvMusicsToAddToPlaylist.setBackgroundResource(R.drawable.recycler_view_border)
+
+                                binding.modalPlaylistInputLayout.error = result.message
+                            }
+                            PlaylistResult.ErrorType.EMPTY_PLAYLIST -> {
+                                binding.modalPlaylistInputLayout.error = null
+
+                                binding.modalPlaylistErrorMessage.text = result.message
+                                binding.rvMusicsToAddToPlaylist.setBackgroundResource(R.drawable.error_border)
+                            }
+
+                            PlaylistResult.ErrorType.UNKNOWN -> {
+                                binding.modalPlaylistInputLayout.error = null
+                                binding.modalPlaylistErrorMessage.text = null
+
+                                showToastMessage("Erro desconhecido.")
+                            }
+                        }
+                    }
+                }
+            } else {
+                binding.modalPlaylistInputLayout.error = null
+                binding.modalPlaylistErrorMessage.error = null
+                binding.rvMusicsToAddToPlaylist.setBackgroundResource(R.drawable.recycler_view_border)
             }
         }
 
@@ -144,7 +204,14 @@ class PlaylistsFragment : Fragment() {
             dialog.dismiss()
         }
 
+        dialog.setOnDismissListener {
+            playlistsViewModel.resetCrudActionResponse()
+        }
         dialog.show()
+    }
+
+    private fun showToastMessage(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

@@ -48,7 +48,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/modalPlaylistInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -66,7 +66,7 @@
             android:id="@+id/modalPlaylistName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nome da Playlist"
+            android:hint="Título da Playlist"
             android:imeOptions="actionDone"
             android:inputType="text|textNoSuggestions" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -85,7 +85,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/modalPlaylistInputLayout"
         tools:listitem="@layout/music_item" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -113,5 +113,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_cancel_24"
         app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/modalPlaylistErrorMessage"
+        style="@style/TextAppearance.Design.Error"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/fabSaveNewPlaylist"
+        app:layout_constraintStart_toEndOf="@+id/fabCancelNewPlaylist"
+        app:layout_constraintTop_toBottomOf="@+id/rvMusicsToAddToPlaylist"
+        tools:text="Teste..." />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

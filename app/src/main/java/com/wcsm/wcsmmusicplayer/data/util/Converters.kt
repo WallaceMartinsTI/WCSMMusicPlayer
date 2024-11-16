@@ -16,12 +16,14 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromUri(uri: Uri?): String? {
-        return uri?.toString()  // Convertendo Uri para String
+    fun fromMusicList(musicList: List<Music>?): String {
+        Log.i("#-# TESTE #-#", "Converters - fromMusicList")
+        return Gson().toJson(musicList)  // Converte a lista de Music para uma String JSON
     }
 
     @TypeConverter
-    fun toUri(uriString: String?): Uri? {
-        return Uri.parse(uriString)  // Convertendo String para Uri
+    fun toMusicList(json: String): List<Music>? {
+        val type = object : TypeToken<List<Music>>() {}.type
+        return Gson().fromJson(json, type)  // Converte a String JSON de volta para uma lista de Music
     }
 }

@@ -116,7 +116,8 @@ class MusicsViewModel @Inject constructor(
         _musicEnded.value = false
     }
 
-    private fun initMediaPlayer(context: Context, uri: Uri) {
+    private fun initMediaPlayer(context: Context, uriString: String) {
+        val uri = Uri.parse(uriString)
         mediaPlayer = MediaPlayer.create(context, uri).apply {
             setOnCompletionListener {
                 _musicEnded.postValue(true)

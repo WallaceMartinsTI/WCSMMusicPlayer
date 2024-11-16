@@ -24,8 +24,8 @@ import com.wcsm.wcsmmusicplayer.domain.model.Music
 import com.wcsm.wcsmmusicplayer.presentation.view.fragment.MusicsFragment
 import com.wcsm.wcsmmusicplayer.presentation.view.fragment.PlaylistsFragment
 import com.wcsm.wcsmmusicplayer.presentation.viewmodel.MusicsViewModel
-import com.wcsm.wcsmmusicplayer.utils.ReproductionModes
-import com.wcsm.wcsmmusicplayer.utils.formatDurationIntToString
+import com.wcsm.wcsmmusicplayer.util.ReproductionModes
+import com.wcsm.wcsmmusicplayer.util.formatDurationIntToString
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

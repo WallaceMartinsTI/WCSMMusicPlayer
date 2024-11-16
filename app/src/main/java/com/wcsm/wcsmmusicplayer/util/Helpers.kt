@@ -1,4 +1,4 @@
-package com.wcsm.wcsmmusicplayer.utils
+package com.wcsm.wcsmmusicplayer.util
 
 import java.util.Locale
 
