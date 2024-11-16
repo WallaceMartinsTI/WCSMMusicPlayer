@@ -1,4 +1,4 @@
-package com.wcsm.wcsmmusicplayer.domain.usecase.getmusics
+package com.wcsm.wcsmmusicplayer.domain.usecase.musics.getmusics
 
 import com.wcsm.wcsmmusicplayer.domain.model.Music
 import com.wcsm.wcsmmusicplayer.domain.repository.IMusicRepository

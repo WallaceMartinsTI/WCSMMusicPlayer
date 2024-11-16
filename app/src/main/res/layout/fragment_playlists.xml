@@ -12,23 +12,23 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
-        app:tint="@color/white"
-        android:src="@android:drawable/ic_input_add"
+        android:src="@drawable/ic_playlist_add_24"
         app:backgroundTint="@color/secondary_dark"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
 
     <TextView
         android:id="@+id/textNoPlaylist"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="Você ainda não tem nenhuma playlist."
         android:textSize="20sp"
         android:textStyle="bold|italic"
+        app:layout_constraintBottom_toTopOf="@+id/fabCreatePlaylist"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,5 +49,18 @@
         app:layout_constraintBottom_toBottomOf="@+id/fabCreatePlaylist"
         app:layout_constraintEnd_toStartOf="@+id/fabCreatePlaylist"
         app:layout_constraintTop_toTopOf="@+id/fabCreatePlaylist" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPlaylists"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/fabCreatePlaylist"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:listitem="@layout/playlist_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

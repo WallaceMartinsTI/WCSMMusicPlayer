@@ -3,6 +3,7 @@ package com.wcsm.wcsmmusicplayer.domain.usecase.getpreviousmusic
 import com.google.common.truth.Truth
 import com.wcsm.wcsmmusicplayer.domain.model.Music
 import com.wcsm.wcsmmusicplayer.domain.usecase.MusicError
+import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getpreviousmusic.GetPreviousMusicUseCase
 import com.wcsm.wcsmmusicplayer.util.musicsList
 import com.wcsm.wcsmmusicplayer.util.uriMock2
 import org.junit.Before

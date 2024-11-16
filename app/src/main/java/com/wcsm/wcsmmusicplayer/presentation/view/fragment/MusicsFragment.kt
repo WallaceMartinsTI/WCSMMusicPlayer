@@ -37,15 +37,22 @@ class MusicsFragment : Fragment() {
             musicAdapter.updateMusicsList(musics)
         }
 
-        musicsViewModel.playingMusic.observe(viewLifecycleOwner) { playingMusic ->
-            if(playingMusic != null) {
-                musicAdapter.updateCurrentMusic(playingMusic)
+        musicsViewModel.playingSong.observe(viewLifecycleOwner) { playingSong ->
+            if(playingSong != null) {
+                musicAdapter.updateCurrentMusic(playingSong)
+            }
+        }
+
+        musicsViewModel.stoppedSong.observe(viewLifecycleOwner) { stoppedSong ->
+            if(stoppedSong != null) {
+                musicAdapter.setMusicStopped(stoppedSong)
+            } else {
+                musicAdapter.setMusicStopped(null)
             }
         }
 
         binding.rvMusic.adapter = musicAdapter
         binding.rvMusic.layoutManager = LinearLayoutManager(context)
-
         binding.rvMusic.addItemDecoration(
             DividerItemDecoration(context, RecyclerView.VERTICAL)
         )
@@ -57,7 +64,6 @@ class MusicsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        musicsViewModel.turnOffMediaPlayer()
         _binding = null
     }
 

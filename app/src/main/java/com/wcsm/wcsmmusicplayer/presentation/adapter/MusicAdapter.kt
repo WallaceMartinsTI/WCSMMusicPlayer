@@ -3,36 +3,68 @@ package com.wcsm.wcsmmusicplayer.presentation.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.wcsm.wcsmmusicplayer.R
 import com.wcsm.wcsmmusicplayer.databinding.MusicItemBinding
 import com.wcsm.wcsmmusicplayer.domain.model.Music
 import com.wcsm.wcsmmusicplayer.utils.formatDurationIntToString
-import java.util.Locale
 
 class MusicAdapter(
     val context: Context,
-    val onClick: (musicTest: Music) -> Unit
+    val onClick: (musicTest: Music) -> Unit,
 ) : Adapter<MusicAdapter.MusicViewHolder>() {
 
     private var musicsList = emptyList<Music>()
-    private var currentMusic: Music? = null
+    private var musicsToBeAddedToPlaylist = mutableListOf<Music>()
+
+    private var currentPlayingSong: Music? = null
+    private var musicStopped: Boolean? = null
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateMusicsList(musicTests: List<Music>) {
-        musicsList = musicTests
+    fun updateMusicsList(musicList: List<Music>) {
+        musicsList = musicList
         notifyDataSetChanged()
     }
 
+    fun checkMusicToBeAddToPlaylist(music: Music) {
+        val checkedMusicIndex = musicsList.indexOf(music)
+        if(checkedMusicIndex != -1) {
+            music.isCheckedToAddToPlaylist = !music.isCheckedToAddToPlaylist
+            val isMusicChecked = music.isCheckedToAddToPlaylist
+            if(isMusicChecked) {
+                musicsToBeAddedToPlaylist.add(music)
+            } else {
+                val uncheckedMusicIndex = musicsToBeAddedToPlaylist.indexOf(music)
+                if(uncheckedMusicIndex != -1) {
+                    musicsToBeAddedToPlaylist.removeAt(uncheckedMusicIndex)
+                }
+            }
+            notifyItemChanged(checkedMusicIndex)
+        }
+
+        // LOG
+        //val listToLog = musicsToBeAddedToPlaylist.map { it.title }
+        //Log.i("#-# TESTE #-#", "onClick - musicsToBeAddedToPlaylist: $listToLog")
+    }
+
+    fun getNewPlaylistMusics() : List<Music>? {
+        val musicToPlaylist = musicsToBeAddedToPlaylist
+
+        return if(musicToPlaylist.isNotEmpty()) {
+            musicToPlaylist.toList()
+        } else {
+            null
+        }
+    }
+
     fun updateCurrentMusic(newCurrentMusic: Music?) {
-        val previousMusic = currentMusic
-        currentMusic = newCurrentMusic
+        val previousMusic = currentPlayingSong
+        currentPlayingSong = newCurrentMusic
         if (previousMusic != null) {
             val previousPosition = musicsList.indexOf(previousMusic)
             if (previousPosition != -1) {
@@ -45,6 +77,18 @@ class MusicAdapter(
             if (newPosition != -1) {
                 notifyItemChanged(newPosition)
             }
+        }
+    }
+
+    fun setMusicStopped(music: Music?) {
+        if(music != null) {
+            val stoppedMusic = musicsList.indexOf(music)
+            if(stoppedMusic != -1) {
+                musicStopped = true
+                notifyItemChanged(stoppedMusic)
+            }
+        } else {
+            musicStopped = false
         }
     }
 
@@ -63,8 +107,18 @@ class MusicAdapter(
 
             setDefaultColors()
 
-            if(music.uri == currentMusic?.uri) {
+            if(music.uri == currentPlayingSong?.uri) {
                 setPlayingMusicColors()
+            }
+
+            if(music.isCheckedToAddToPlaylist) {
+                setPlayingMusicColors()
+            } else {
+                setDefaultColors()
+            }
+
+            if(musicStopped != null && musicStopped == true) {
+                setDefaultColors()
             }
         }
 

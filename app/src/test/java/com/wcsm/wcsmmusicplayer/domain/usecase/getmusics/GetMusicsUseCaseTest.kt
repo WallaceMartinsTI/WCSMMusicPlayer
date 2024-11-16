@@ -5,6 +5,7 @@ import com.google.common.truth.Truth.assertThat
 import com.wcsm.wcsmmusicplayer.data.repository.MusicRepositoryImpl
 import com.wcsm.wcsmmusicplayer.domain.model.Music
 import com.wcsm.wcsmmusicplayer.domain.repository.MusicRepositoryImplFake
+import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getmusics.GetMusicsUseCase
 import com.wcsm.wcsmmusicplayer.util.musicsList
 import kotlinx.coroutines.test.runTest
 import org.junit.After

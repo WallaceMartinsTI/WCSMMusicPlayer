@@ -1,16 +1,13 @@
 package com.wcsm.wcsmmusicplayer.data.repository
 
+
 import android.net.Uri
 import com.google.common.truth.Truth.assertThat
-import com.wcsm.wcsmmusicplayer.data.mediastore.MusicMediaStore
+import com.wcsm.wcsmmusicplayer.data.mediastore.IMusicMediaStore
 import com.wcsm.wcsmmusicplayer.data.mediastore.MusicMediaStoreFake
-import com.wcsm.wcsmmusicplayer.data.model.MusicFromDevice
-import com.wcsm.wcsmmusicplayer.domain.model.Music
 import com.wcsm.wcsmmusicplayer.util.musicsFromDeviceList
 import com.wcsm.wcsmmusicplayer.util.musicsList
 import kotlinx.coroutines.test.runTest
-
-
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,17 +21,13 @@ class MusicRepositoryImplTest {
 
     // MOCK
     @Mock
-    private lateinit var musicMediaStoreMock: MusicMediaStore
+    private lateinit var musicMediaStoreMock: IMusicMediaStore
 
     // FAKE
     private lateinit var musicMediaStoreFake: MusicMediaStoreFake
 
     private lateinit var musicRepositoryImplMock: MusicRepositoryImpl
     private lateinit var musicRepositoryImplFake: MusicRepositoryImpl
-
-    val uriMock1 = Mockito.mock(Uri::class.java)
-    val uriMock2 = Mockito.mock(Uri::class.java)
-    val uriMock3 = Mockito.mock(Uri::class.java)
 
     @Before
     fun setUp() {

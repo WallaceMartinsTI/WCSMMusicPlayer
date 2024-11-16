@@ -1,4 +1,4 @@
-package com.wcsm.wcsmmusicplayer.domain.usecase.getnextmusic
+package com.wcsm.wcsmmusicplayer.domain.usecase.musics.getnextmusic
 
 import com.wcsm.wcsmmusicplayer.domain.model.Music
 import com.wcsm.wcsmmusicplayer.domain.usecase.MusicError

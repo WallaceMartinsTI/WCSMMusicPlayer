@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wcsm.wcsmmusicplayer.domain.model.Music
 import com.wcsm.wcsmmusicplayer.domain.usecase.MusicError
-import com.wcsm.wcsmmusicplayer.domain.usecase.getmusics.IGetMusicsUseCase
-import com.wcsm.wcsmmusicplayer.domain.usecase.getnextmusic.IGetNextMusicUseCase
-import com.wcsm.wcsmmusicplayer.domain.usecase.getpreviousmusic.IGetPreviousMusicUseCase
+import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getmusics.IGetMusicsUseCase
+import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getnextmusic.IGetNextMusicUseCase
+import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getpreviousmusic.IGetPreviousMusicUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,11 +31,14 @@ class MusicsViewModel @Inject constructor(
     private val _musics = MutableLiveData<List<Music>>()
     val musics: LiveData<List<Music>> get() = _musics
     
-    private val _playingMusic = MutableLiveData<Music>()
-    val playingMusic: LiveData<Music> get() = _playingMusic
+    private val _playingSong = MutableLiveData<Music?>()
+    val playingSong: LiveData<Music?> get() = _playingSong
 
     private val _musicPaused = MutableLiveData<Boolean>()
     val musicPaused: LiveData<Boolean> get() = _musicPaused
+
+    private val _stoppedSong = MutableLiveData<Music?>()
+    val stoppedSong: LiveData<Music?> get() = _stoppedSong
 
     private val _musicEnded = MutableLiveData<Boolean>()
     val musicEnded: LiveData<Boolean> get() = _musicEnded
@@ -62,15 +65,16 @@ class MusicsViewModel @Inject constructor(
             stopPlayingMusic()
             initMediaPlayer(context, music.uri)
         }
-        _playingMusic.value = music
+        _playingSong.value = music
         _musicPaused.value = false
+        _stoppedSong.value = null
         mediaPlayer?.start()
     }
 
     fun playOrPause(context: Context) {
         if(mediaPlayer == null) {
-            if(playingMusic.value != null) {
-                startMusic(context, playingMusic.value!!)
+            if(playingSong.value != null) {
+                startMusic(context, playingSong.value!!)
             }
         } else {
             if(mediaPlayer?.isPlaying == true) {
@@ -87,8 +91,8 @@ class MusicsViewModel @Inject constructor(
     }
 
     fun restartMusic(context: Context) {
-        if(playingMusic.value != null) {
-            startMusic(context, playingMusic.value!!)
+        if(playingSong.value != null) {
+            startMusic(context, playingSong.value!!)
         }
     }
 
@@ -97,7 +101,6 @@ class MusicsViewModel @Inject constructor(
     }
 
     fun stopMusic() {
-        // HIDE MUSIC SCREEN
         stopPlayingMusic()
     }
 
@@ -113,14 +116,6 @@ class MusicsViewModel @Inject constructor(
         _musicEnded.value = false
     }
 
-    fun turnOffMediaPlayer() {
-        if(mediaPlayer != null) {
-            mediaPlayer?.stop()
-            mediaPlayer?.release()
-            mediaPlayer = null
-        }
-    }
-
     private fun initMediaPlayer(context: Context, uri: Uri) {
         mediaPlayer = MediaPlayer.create(context, uri).apply {
             setOnCompletionListener {
@@ -131,7 +126,7 @@ class MusicsViewModel @Inject constructor(
 
     private fun getPreviousMusic(context: Context) {
         val musicsList = musics.value
-        val currentMusic = playingMusic.value
+        val currentMusic = playingSong.value
         if(musicsList != null && currentMusic != null) {
             val result = getPreviousMusicUseCase(musicsList, currentMusic)
 
@@ -152,7 +147,7 @@ class MusicsViewModel @Inject constructor(
 
     private fun getNextMusic(context: Context) {
         val musicsList = musics.value
-        val currentMusic = playingMusic.value
+        val currentMusic = playingSong.value
         if(musicsList != null && currentMusic != null) {
             val result = getNextMusicUseCase(musicsList, currentMusic)
 
@@ -172,6 +167,8 @@ class MusicsViewModel @Inject constructor(
     }
 
     private fun stopPlayingMusic() {
+        _stoppedSong.value = playingSong.value
+        _playingSong.value = null
         mediaPlayer?.stop()
         mediaPlayer?.reset()
         mediaPlayer?.release()

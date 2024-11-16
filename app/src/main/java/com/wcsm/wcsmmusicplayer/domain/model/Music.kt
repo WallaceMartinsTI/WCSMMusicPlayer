@@ -8,5 +8,6 @@ data class Music(
     val artist: String,
     val duration: Int,
     val album: String,
-    val playlists: List<String>
+    val playlists: List<String>,
+    var isCheckedToAddToPlaylist: Boolean = false
 )

@@ -62,7 +62,7 @@ class MusicsActivity : AppCompatActivity() {
             initPlaylistsFragment()
         }
 
-        musicsViewModel.playingMusic.observe(this) { playingMusic ->
+        musicsViewModel.playingSong.observe(this) { playingMusic ->
             if(playingMusic != null) {
                 setPlayingMusicToScreen(playingMusic)
                 binding.playingMusicInclude.playingMusicSeekBar.max = playingMusic.duration

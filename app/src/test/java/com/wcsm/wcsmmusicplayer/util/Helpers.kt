@@ -3,6 +3,7 @@ package com.wcsm.wcsmmusicplayer.util
 import android.net.Uri
 import com.wcsm.wcsmmusicplayer.data.model.MusicFromDevice
 import com.wcsm.wcsmmusicplayer.domain.model.Music
+import com.wcsm.wcsmmusicplayer.domain.model.Playlist
 import org.mockito.Mockito
 
 val uriMock1: Uri = Mockito.mock(Uri::class.java)
@@ -28,4 +29,23 @@ val musicsFromDeviceList = listOf(
     MusicFromDevice(uriMock4, "Musica 4", "Artista 4", "storage/4", 23371, "Album 4", "Size 4", "MimeType 4", "Year 4"),
     MusicFromDevice(uriMock5, "Musica 5", "Artista 5", "storage/5", 23371, "Album 5", "Size 5", "MimeType 5", "Year 5"),
     MusicFromDevice(uriMock6, "Musica 6", "Artista 6", "storage/6", 23371, "Album 6", "Size 6", "MimeType 6", "Year 6")
+)
+
+
+val emptyPlaylistsList = listOf(
+    Playlist(0, "Rock", emptyList()),
+    Playlist(1, "Eletrônica", emptyList()),
+    Playlist(2, "Forró", emptyList()),
+    Playlist(3, "Pop", emptyList()),
+    Playlist(4, "Sertanejo", emptyList()),
+    Playlist(5, "Rap", emptyList()),
+)
+
+val playlistsWithSongsList = listOf(
+    Playlist(0, "Rock", listOf(musicsList[0], musicsList[1], musicsList[2])),
+    Playlist(1, "Eletrônica", listOf(musicsList[0], musicsList[1], musicsList[2])),
+    Playlist(2, "Forró", listOf(musicsList[0], musicsList[1], musicsList[2])),
+    Playlist(3, "Pop", listOf(musicsList[0], musicsList[1], musicsList[2])),
+    Playlist(4, "Sertanejo", listOf(musicsList[0], musicsList[1], musicsList[2])),
+    Playlist(5, "Rap", listOf(musicsList[0], musicsList[1], musicsList[2])),
 )

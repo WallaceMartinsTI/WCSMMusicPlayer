@@ -10,8 +10,9 @@ import android.util.Log
 import com.wcsm.wcsmmusicplayer.data.model.MusicFromDevice
 import java.io.File
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class MusicMediaStore(
+class MusicMediaStore (
     private val context: Context
 ) : IMusicMediaStore {
     override fun fetchMusicsFromDevice(): List<MusicFromDevice> {

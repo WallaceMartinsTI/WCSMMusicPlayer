@@ -1,14 +1,13 @@
 package com.wcsm.wcsmmusicplayer.domain.usecase.getnextmusic
 
-import android.net.Uri
 import com.google.common.truth.Truth.assertThat
 import com.wcsm.wcsmmusicplayer.domain.model.Music
 import com.wcsm.wcsmmusicplayer.domain.usecase.MusicError
+import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getnextmusic.GetNextMusicUseCase
 import com.wcsm.wcsmmusicplayer.util.musicsList
 import com.wcsm.wcsmmusicplayer.util.uriMock2
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
 
 class GetNextMusicUseCaseTest {
 
