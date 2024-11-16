@@ -1,4 +1,4 @@
-package com.wcsm.wcsmmusicplayer.domain.usecase.getnextmusic
+package com.wcsm.wcsmmusicplayer.domain.usecase.musics.getnextmusic
 
 import com.google.common.truth.Truth.assertThat
 import com.wcsm.wcsmmusicplayer.domain.model.Music
@@ -48,7 +48,7 @@ class GetNextMusicUseCaseTest {
 
     @Test
     fun `should return error when music is not found`() {
-        val currentMusic = Music(uriMock2,"Musica 9","Artista 9", 23948, "Album 9", emptyList())
+        val currentMusic = Music("uri9","Musica 9","Artista 9", 23948, "Album 9", emptyList())
 
         val result = getNextMusicUseCase(musicsList, currentMusic)
 

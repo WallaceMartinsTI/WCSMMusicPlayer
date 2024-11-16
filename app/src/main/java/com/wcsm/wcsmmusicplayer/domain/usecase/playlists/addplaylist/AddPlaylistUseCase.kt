@@ -22,6 +22,7 @@ class AddPlaylistUseCase @Inject constructor(
         if(playlist.musics.isEmpty()) {
             return PlaylistResult.Error(
                 message = "Você não pode criar uma playlist vazia.",
+                crudAction = PlaylistResult.CrudAction.ADD_PLAYLIST,
                 type = PlaylistResult.ErrorType.EMPTY_PLAYLIST
             )
         }
@@ -29,11 +30,12 @@ class AddPlaylistUseCase @Inject constructor(
         return try {
             playlistRepository.saveNewPlaylist(playlist)
             Log.i(tag, "Playlist saved successfully!")
-            PlaylistResult.Success("Playlist criada com sucesso!")
+            PlaylistResult.Success("Playlist criada com sucesso!", crudAction = PlaylistResult.CrudAction.ADD_PLAYLIST,)
         } catch (e: Exception) {
             Log.e(tag, "Error saving playlist")
             PlaylistResult.Error(
                 message = "Erro inesperado ao salvar a playlist.",
+                crudAction = PlaylistResult.CrudAction.ADD_PLAYLIST,
                 type = PlaylistResult.ErrorType.UNKNOWN
             )
         }
@@ -43,11 +45,14 @@ class AddPlaylistUseCase @Inject constructor(
         return when {
             playlistTitle.isEmpty() -> PlaylistResult.Error(
                 message = "O título da playlist não pode ser vazio.",
+                crudAction = PlaylistResult.CrudAction.ADD_PLAYLIST,
                 type = PlaylistResult.ErrorType.INVALID_TITLE)
             playlistTitle.length < 3 -> PlaylistResult.Error(
                 message = "Título muito curto (mínimo de 3 caracteres).",
+                crudAction = PlaylistResult.CrudAction.ADD_PLAYLIST,
                 type = PlaylistResult.ErrorType.INVALID_TITLE)
-            else -> PlaylistResult.Success("")
+            else -> PlaylistResult.Success("", crudAction = PlaylistResult.CrudAction.ADD_PLAYLIST,)
         }
     }
+
 }

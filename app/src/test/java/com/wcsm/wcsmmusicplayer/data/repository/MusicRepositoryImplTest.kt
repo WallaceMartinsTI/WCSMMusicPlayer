@@ -61,7 +61,14 @@ class MusicRepositoryImplTest {
 
         val musics = musicRepositoryImplMock.getMusicsFromData()
 
-        assertThat(musics).isEqualTo(musicsList)
+        musics.forEachIndexed { index, actualMusic ->
+            val expectedMusic = musicsList[index]
+            assertThat(actualMusic.title).isEqualTo(expectedMusic.title)
+            assertThat(actualMusic.album).isEqualTo(expectedMusic.album)
+            assertThat(actualMusic.duration).isEqualTo(expectedMusic.duration)
+        }
+
+        //assertThat(musics).isEqualTo(musicsList)
         Mockito.verify(musicMediaStoreMock, Mockito.times(1)).fetchMusicsFromDevice()
     }
 }

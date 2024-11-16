@@ -36,8 +36,6 @@ class PlaylistsFragment : Fragment() {
 
     private val playlistsViewModel by activityViewModels<PlaylistsViewModel>()
 
-    private var createPlaylistErrorMessage: String? = null
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,11 +44,13 @@ class PlaylistsFragment : Fragment() {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
 
         playlistAdapter = PlaylistAdapter(
-            { /* onEdit */
+            { playlist -> /* onEdit */
                 Log.i("#-# TESTE #-#", "PlaylistsFragment - Adapter - ON EDIT")
+                showCreatePlaylistModal(editingPlaylist = true, playlist = playlist) // Open modal to edit playlist
             },
-            { /* onDelete */
+            { playlist -> /* onDelete */
                 Log.i("#-# TESTE #-#", "PlaylistsFragment - Adapter - ON DELETE")
+                playlistsViewModel.deletePlaylist(playlist)
             },
         ) {
             /* onClick */
@@ -71,15 +71,25 @@ class PlaylistsFragment : Fragment() {
             }
         }
 
-            /*val (isSuccess, message) = crudActionResponse
-            if(isSuccess) {
-                // Salvou a playlist com sucesso... fazer algo...
-                showToastMessage(message)
-                createPlaylistErrorMessage = null
-            } else {
-                createPlaylistErrorMessage = message
-            }*/
+        playlistsViewModel.crudActionResponse.observe(viewLifecycleOwner) { result ->
+            if(result != null) {
+                when(result) {
+                    is PlaylistResult.Success -> {
+                        if(result.crudAction == PlaylistResult.CrudAction.ADD_PLAYLIST) {
+                            showToastMessage(result.message)
+                        } else if(result.crudAction == PlaylistResult.CrudAction.DELETE_PLAYLIST) {
+                            showToastMessage(result.message)
+                        }
+                    }
+                    is PlaylistResult.Error -> {
+                        if(result.crudAction == PlaylistResult.CrudAction.DELETE_PLAYLIST) {
+                            showToastMessage(result.message)
+                        }
+                    }
+                }
+            }
 
+        }
 
 
         binding.rvPlaylists.adapter = playlistAdapter
@@ -89,14 +99,21 @@ class PlaylistsFragment : Fragment() {
         )
 
         binding.fabCreatePlaylist.setOnClickListener {
-            showCreatePlaylistModal()
+            showCreatePlaylistModal(editingPlaylist = false, playlist = null)
+        }
+
+        musicAdapter = MusicAdapter(this) { music ->
+            musicAdapter.checkMusicToBeAddToPlaylist(music)
+        }
+
+        musicsViewModel.musics.observe(viewLifecycleOwner) { musics ->
+            musicAdapter.updateMusicsList(musics)
         }
 
         return binding.root
     }
 
     private fun handleNoPlaylistViews(hasPlaylist: Boolean) {
-        Log.i("#-# TESTE #-#", "handleNoPlaylistViews - hasPlaylist: $hasPlaylist")
         if(hasPlaylist) {
             binding.textNoPlaylist.visibility = View.GONE
             binding.textCreatePlaylistHelper.visibility = View.GONE
@@ -110,7 +127,6 @@ class PlaylistsFragment : Fragment() {
     }
 
     private fun noPlaylistItems() {
-        Log.i("#-# TESTE #-#", "noPlaylistItems: CHAMOU A ANIMAÇÃO")
         ObjectAnimator.ofFloat(
             binding.textCreatePlaylistHelper,
             "translationX",
@@ -123,20 +139,12 @@ class PlaylistsFragment : Fragment() {
         }
     }
 
-    private fun showCreatePlaylistModal() {
+    private fun showCreatePlaylistModal(editingPlaylist: Boolean, playlist: Playlist?) {
         val binding = CreatePlaylistModalBinding.inflate(LayoutInflater.from(context))
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(binding.root)
             .create()
-
-        musicAdapter = MusicAdapter(requireContext()) { music ->
-            musicAdapter.checkMusicToBeAddToPlaylist(music)
-        }
-
-        musicsViewModel.musics.observe(viewLifecycleOwner) { musics ->
-            musicAdapter.updateMusicsList(musics)
-        }
 
         binding.rvMusicsToAddToPlaylist.adapter = musicAdapter
         binding.rvMusicsToAddToPlaylist.layoutManager = LinearLayoutManager(context)
@@ -145,6 +153,10 @@ class PlaylistsFragment : Fragment() {
         )
 
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        if(editingPlaylist && playlist != null) {
+            binding.modalPlaylistName.setText(playlist.title)
+        }
 
         binding.fabSaveNewPlaylist.setOnClickListener {
             binding.modalPlaylistInputLayout.error = null
@@ -163,10 +175,9 @@ class PlaylistsFragment : Fragment() {
             if(result != null) {
                 when (result) {
                     is PlaylistResult.Success -> {
-                        showToastMessage(result.message)
+                        //showToastMessage(result.message)
                         binding.modalPlaylistInputLayout.error = null
                         binding.rvMusicsToAddToPlaylist.setBackgroundResource(R.drawable.recycler_view_border)
-                        // FAZER O DISSMISS
                         dialog.dismiss()
                     }
                     is PlaylistResult.Error -> {

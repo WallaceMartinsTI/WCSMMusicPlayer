@@ -3,19 +3,24 @@ package com.wcsm.wcsmmusicplayer.presentation.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.wcsm.wcsmmusicplayer.R
 import com.wcsm.wcsmmusicplayer.databinding.MusicItemBinding
 import com.wcsm.wcsmmusicplayer.domain.model.Music
+import com.wcsm.wcsmmusicplayer.presentation.view.activity.MusicsActivity
+import com.wcsm.wcsmmusicplayer.presentation.view.fragment.MusicsFragment
+import com.wcsm.wcsmmusicplayer.presentation.view.fragment.PlaylistsFragment
 import com.wcsm.wcsmmusicplayer.util.formatDurationIntToString
 
 class MusicAdapter(
-    val context: Context,
-    val onClick: (musicTest: Music) -> Unit,
+    val fragment: Fragment,
+    val onClick: (music: Music) -> Unit,
 ) : Adapter<MusicAdapter.MusicViewHolder>() {
 
     private var musicsList = emptyList<Music>()
@@ -23,6 +28,8 @@ class MusicAdapter(
 
     private var currentPlayingSong: Music? = null
     private var musicStopped: Boolean? = null
+
+    private val context = fragment.requireContext()
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateMusicsList(musicList: List<Music>) {
@@ -45,10 +52,6 @@ class MusicAdapter(
             }
             notifyItemChanged(checkedMusicIndex)
         }
-
-        // LOG
-        //val listToLog = musicsToBeAddedToPlaylist.map { it.title }
-        //Log.i("#-# TESTE #-#", "onClick - musicsToBeAddedToPlaylist: $listToLog")
     }
 
     fun getNewPlaylistMusics() : List<Music> {
@@ -104,10 +107,12 @@ class MusicAdapter(
                 setPlayingMusicColors()
             }
 
-            if(music.isCheckedToAddToPlaylist) {
-                setPlayingMusicColors()
-            } else {
-                setDefaultColors()
+            if(fragment is PlaylistsFragment) {
+                if(music.isCheckedToAddToPlaylist) {
+                    setPlayingMusicColors()
+                } else {
+                    setDefaultColors()
+                }
             }
 
             if(musicStopped != null && musicStopped == true) {

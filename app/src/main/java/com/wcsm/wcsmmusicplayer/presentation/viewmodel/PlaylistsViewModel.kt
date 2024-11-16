@@ -12,6 +12,7 @@ import com.wcsm.wcsmmusicplayer.domain.model.Playlist
 import com.wcsm.wcsmmusicplayer.domain.repository.IPlaylistRepository
 import com.wcsm.wcsmmusicplayer.domain.usecase.PlaylistResult
 import com.wcsm.wcsmmusicplayer.domain.usecase.playlists.addplaylist.IAddPlaylistUseCase
+import com.wcsm.wcsmmusicplayer.domain.usecase.playlists.deleteplaylist.DeletePlaylistUseCase
 import com.wcsm.wcsmmusicplayer.domain.usecase.playlists.getplaylists.IGetPlaylistsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PlaylistsViewModel @Inject constructor(
     private val getPlaylistsUseCase: IGetPlaylistsUseCase,
-    private val addPlaylistUseCase: IAddPlaylistUseCase
+    private val addPlaylistUseCase: IAddPlaylistUseCase,
+    private val deletePlaylistUseCase: DeletePlaylistUseCase
 ) : ViewModel() {
 
     private val tag = "# PlaylistsViewModel #"
@@ -60,11 +62,17 @@ class PlaylistsViewModel @Inject constructor(
         _crudActionResponse.value = null
     }
 
-    /*
+
     fun deletePlaylist(playlist: Playlist) {
+        Log.i("#-# TESTE #-#", "PlaylistsViewModel - CHAMOU: deletePlaylist")
         viewModelScope.launch {
-            playlistRepository.deletePlaylist(playlist)
+            val result = deletePlaylistUseCase(playlist)
+            _crudActionResponse.postValue(result)
+
+            if(result is PlaylistResult.Success) {
+                getPlaylists()
+            }
         }
-    }*/
+    }
 
 }

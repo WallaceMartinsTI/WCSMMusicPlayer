@@ -1,4 +1,4 @@
-package com.wcsm.wcsmmusicplayer.domain.usecase.getmusics
+package com.wcsm.wcsmmusicplayer.domain.usecase.musics.getmusics
 
 import android.net.Uri
 import com.google.common.truth.Truth.assertThat

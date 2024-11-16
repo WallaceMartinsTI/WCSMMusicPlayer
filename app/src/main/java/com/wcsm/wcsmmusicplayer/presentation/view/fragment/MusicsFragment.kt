@@ -29,7 +29,7 @@ class MusicsFragment : Fragment() {
     ): View {
         _binding = FragmentMusicsBinding.inflate(inflater, container, false)
 
-        musicAdapter = MusicAdapter(requireContext()) { music ->
+        musicAdapter = MusicAdapter(this) { music ->
             musicsViewModel.startMusic(requireContext(), music)
         }
 

@@ -1,7 +1,5 @@
 package com.wcsm.wcsmmusicplayer.domain.model
 
-import android.net.Uri
-
 data class Music(
     val uri: String,
     val title: String,

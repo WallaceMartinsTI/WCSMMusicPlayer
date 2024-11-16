@@ -10,8 +10,8 @@ import com.wcsm.wcsmmusicplayer.databinding.PlaylistItemBinding
 import com.wcsm.wcsmmusicplayer.domain.model.Playlist
 
 class PlaylistAdapter(
-    private val onEdit: () -> Unit,
-    private val onDelete: () -> Unit,
+    private val onEdit: (playlist: Playlist) -> Unit,
+    private val onDelete: (playlist: Playlist) -> Unit,
     private val onClick: () -> Unit,
 ) : Adapter<PlaylistAdapter.PlaylistViewHolder>() {
 
@@ -35,11 +35,11 @@ class PlaylistAdapter(
             binding.itemPlaylistMusics.text = playlist.musics.size.toString()
 
             binding.itemPlaylistBtnEdit.setOnClickListener {
-                onEdit()
+                onEdit(playlist)
             }
 
             binding.itemPlaylistBtnDelete.setOnClickListener {
-                onDelete()
+                onDelete(playlist)
             }
 
             binding.cdPlaylistItem.setOnClickListener {

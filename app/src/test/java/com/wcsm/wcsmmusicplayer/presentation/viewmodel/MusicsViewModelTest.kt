@@ -5,11 +5,11 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.wcsm.wcsmmusicplayer.domain.model.Music
 import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getmusics.GetMusicsUseCase
-import com.wcsm.wcsmmusicplayer.domain.usecase.getmusics.GetMusicsUseCaseFake
+import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getmusics.GetMusicsUseCaseFake
 import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getnextmusic.GetNextMusicUseCase
-import com.wcsm.wcsmmusicplayer.domain.usecase.getnextmusic.GetNextMusicUseCaseFake
+import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getnextmusic.GetNextMusicUseCaseFake
 import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getpreviousmusic.GetPreviousMusicUseCase
-import com.wcsm.wcsmmusicplayer.domain.usecase.getpreviousmusic.GetPreviousMusicUseCaseFake
+import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getpreviousmusic.GetPreviousMusicUseCaseFake
 import com.wcsm.wcsmmusicplayer.util.getOrAwaitValue
 import com.wcsm.wcsmmusicplayer.util.musicsList
 import kotlinx.coroutines.test.runTest

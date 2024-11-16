@@ -12,6 +12,8 @@ import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getpreviousmusic.GetPrevio
 import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getpreviousmusic.IGetPreviousMusicUseCase
 import com.wcsm.wcsmmusicplayer.domain.usecase.playlists.addplaylist.AddPlaylistUseCase
 import com.wcsm.wcsmmusicplayer.domain.usecase.playlists.addplaylist.IAddPlaylistUseCase
+import com.wcsm.wcsmmusicplayer.domain.usecase.playlists.deleteplaylist.DeletePlaylistUseCase
+import com.wcsm.wcsmmusicplayer.domain.usecase.playlists.deleteplaylist.IDeletePlaylistUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,6 +46,11 @@ object UseCaseModule {
     @Provides
     fun provideAddPlaylistUseCase(playlistsRepository: IPlaylistRepository) : IAddPlaylistUseCase {
         return AddPlaylistUseCase(playlistsRepository)
+    }
+
+    @Provides
+    fun provideDeletePlaylistUseCase(playlistsRepository: IPlaylistRepository) : IDeletePlaylistUseCase {
+        return DeletePlaylistUseCase(playlistsRepository)
     }
 
 }
