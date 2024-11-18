@@ -1,7 +1,7 @@
 package com.wcsm.wcsmmusicplayer.presentation.view.fragment
 
 import android.animation.ObjectAnimator
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wcsm.wcsmmusicplayer.R
 import com.wcsm.wcsmmusicplayer.databinding.CreatePlaylistModalBinding
 import com.wcsm.wcsmmusicplayer.databinding.FragmentPlaylistsBinding
+import com.wcsm.wcsmmusicplayer.databinding.PlaylistModalBinding
 import com.wcsm.wcsmmusicplayer.domain.model.Playlist
 import com.wcsm.wcsmmusicplayer.domain.usecase.PlaylistResult
 import com.wcsm.wcsmmusicplayer.presentation.adapter.MusicAdapter
@@ -44,23 +45,25 @@ class PlaylistsFragment : Fragment() {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
 
         playlistAdapter = PlaylistAdapter(
-            { playlist -> /* onEdit */
-                Log.i("#-# TESTE #-#", "PlaylistsFragment - Adapter - ON EDIT")
+            onEdit = { playlist ->
                 showCreatePlaylistModal(editingPlaylist = true, playlist = playlist) // Open modal to edit playlist
             },
-            { playlist -> /* onDelete */
-                Log.i("#-# TESTE #-#", "PlaylistsFragment - Adapter - ON DELETE")
+            onDelete = { playlist ->
+                playlistsViewModel.updatePlaylistDeleted(false, "")
                 playlistsViewModel.deletePlaylist(playlist)
             },
-        ) {
+        ) { playlist ->
             /* onClick */
-            Log.i("#-# TESTE #-#", "PlaylistsFragment - Adapter - ON CLICK")
+            //val intent = Intent(requireContext(), SelectedPlaylistActivity::class.java)
+            //intent.putExtra("playlist", playlist)
+            //startActivity(intent)
+            musicAdapter.isSelectedPlaylistModal = true
+            showPlaylistSelectedModal(playlist)
         }
 
         playlistsViewModel.getPlaylists()
 
         playlistsViewModel.playlists.observe(viewLifecycleOwner) { playlists ->
-            Log.i("#-# TESTE #-#", "PLAYLIST-OBSERVE: playlist: $playlists")
             if(playlists != null) {
                 if(playlists.isNotEmpty()) {
                     playlistAdapter.updatePlaylistsList(playlists)
@@ -71,24 +74,11 @@ class PlaylistsFragment : Fragment() {
             }
         }
 
-        playlistsViewModel.crudActionResponse.observe(viewLifecycleOwner) { result ->
-            if(result != null) {
-                when(result) {
-                    is PlaylistResult.Success -> {
-                        if(result.crudAction == PlaylistResult.CrudAction.ADD_PLAYLIST) {
-                            showToastMessage(result.message)
-                        } else if(result.crudAction == PlaylistResult.CrudAction.DELETE_PLAYLIST) {
-                            showToastMessage(result.message)
-                        }
-                    }
-                    is PlaylistResult.Error -> {
-                        if(result.crudAction == PlaylistResult.CrudAction.DELETE_PLAYLIST) {
-                            showToastMessage(result.message)
-                        }
-                    }
-                }
+        playlistsViewModel.playlistDeleted.observe(viewLifecycleOwner) { playlistDeleted ->
+            if(playlistDeleted.first) {
+                showToastMessage(playlistDeleted.second)
+                playlistsViewModel.updatePlaylistDeleted(false, "")
             }
-
         }
 
 
@@ -139,6 +129,36 @@ class PlaylistsFragment : Fragment() {
         }
     }
 
+    private fun showPlaylistSelectedModal(playlist: Playlist) {
+        Log.i("#-# TESTE #-#", "showPlaylistSelectedModal - playlist: $playlist")
+        Log.i("#-# TESTE #-#", "showPlaylistSelectedModal - playlist.musics: ${playlist.musics}")
+        val binding = PlaylistModalBinding.inflate(LayoutInflater.from(context))
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(binding.root)
+            .create()
+
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        binding.rvPlaylistSelected.adapter = musicAdapter
+        binding.rvPlaylistSelected.layoutManager = LinearLayoutManager(context)
+        binding.rvPlaylistSelected.addItemDecoration(
+            DividerItemDecoration(context, RecyclerView.VERTICAL)
+        )
+
+        musicAdapter.updateMusicsList(playlist.musics)
+
+        binding.fabPlaylistSelectedExit.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.setOnDismissListener {
+            musicAdapter.isSelectedPlaylistModal = false
+        }
+
+        dialog.show()
+    }
+
     private fun showCreatePlaylistModal(editingPlaylist: Boolean, playlist: Playlist?) {
         val binding = CreatePlaylistModalBinding.inflate(LayoutInflater.from(context))
 
@@ -175,7 +195,7 @@ class PlaylistsFragment : Fragment() {
             if(result != null) {
                 when (result) {
                     is PlaylistResult.Success -> {
-                        //showToastMessage(result.message)
+                        showToastMessage(result.message)
                         binding.modalPlaylistInputLayout.error = null
                         binding.rvMusicsToAddToPlaylist.setBackgroundResource(R.drawable.recycler_view_border)
                         dialog.dismiss()
@@ -218,6 +238,7 @@ class PlaylistsFragment : Fragment() {
         dialog.setOnDismissListener {
             playlistsViewModel.resetCrudActionResponse()
         }
+
         dialog.show()
     }
 

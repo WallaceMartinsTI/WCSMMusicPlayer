@@ -12,7 +12,7 @@ import com.wcsm.wcsmmusicplayer.domain.model.Playlist
 class PlaylistAdapter(
     private val onEdit: (playlist: Playlist) -> Unit,
     private val onDelete: (playlist: Playlist) -> Unit,
-    private val onClick: () -> Unit,
+    private val onClick: (playlist: Playlist) -> Unit,
 ) : Adapter<PlaylistAdapter.PlaylistViewHolder>() {
 
     private var playlistsList = emptyList<Playlist>()
@@ -21,10 +21,6 @@ class PlaylistAdapter(
     fun updatePlaylistsList(playlistList: List<Playlist>) {
         playlistsList = playlistList
         notifyDataSetChanged()
-    }
-
-    init {
-        Log.i("#-# TESTE #-#", "PLAYLIST ADAPTER INIT")
     }
 
     inner class PlaylistViewHolder(
@@ -43,7 +39,7 @@ class PlaylistAdapter(
             }
 
             binding.cdPlaylistItem.setOnClickListener {
-                onClick()
+                onClick(playlist)
             }
         }
     }

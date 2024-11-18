@@ -84,7 +84,6 @@ class MusicsActivity : AppCompatActivity() {
                     ContextCompat.getDrawable(this, iconRes)
                 )
             }
-
         }
 
         musicsViewModel.musicEnded.observe(this) { musicEnded ->

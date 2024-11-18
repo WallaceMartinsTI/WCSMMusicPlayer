@@ -16,12 +16,11 @@ class DeletePlaylistUseCase @Inject constructor(
         return try {
             playlistRepository.deletePlaylist(playlist)
             Log.i(tag, "Playlist deleted successfully!")
-            PlaylistResult.Success("Playlist deletada com sucesso!", crudAction = PlaylistResult.CrudAction.DELETE_PLAYLIST)
+            PlaylistResult.Success("Playlist deletada com sucesso!")
         } catch (e: Exception) {
             Log.e(tag, "Error deleting playlist")
             PlaylistResult.Error(
                 message = "Erro inesperado ao deletar a playlist.",
-                crudAction = PlaylistResult.CrudAction.DELETE_PLAYLIST,
                 type = PlaylistResult.ErrorType.UNKNOWN
             )
         }

@@ -19,7 +19,7 @@ import com.wcsm.wcsmmusicplayer.presentation.view.fragment.PlaylistsFragment
 import com.wcsm.wcsmmusicplayer.util.formatDurationIntToString
 
 class MusicAdapter(
-    val fragment: Fragment,
+    val fragment: Fragment?,
     val onClick: (music: Music) -> Unit,
 ) : Adapter<MusicAdapter.MusicViewHolder>() {
 
@@ -29,7 +29,9 @@ class MusicAdapter(
     private var currentPlayingSong: Music? = null
     private var musicStopped: Boolean? = null
 
-    private val context = fragment.requireContext()
+    private val context = fragment?.requireContext()
+
+    var isSelectedPlaylistModal = false
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateMusicsList(musicList: List<Music>) {
@@ -92,6 +94,10 @@ class MusicAdapter(
         private val binding: MusicItemBinding
     ) : ViewHolder(binding.root) {
         fun bind(music: Music) {
+            if(isSelectedPlaylistModal) {
+                music.isCheckedToAddToPlaylist = false
+            }
+
             binding.textMusicTitle.text = music.title
             binding.textMusicArtist.text = music.artist
             binding.textMusicAlbum.text = music.album
@@ -121,23 +127,27 @@ class MusicAdapter(
         }
 
         fun setDefaultColors() {
-            val defaultColor = ContextCompat.getColor(context, R.color.on_surface)
-            binding.textMusicTitle.setTextColor(defaultColor)
-            binding.ivMusic.imageTintList = ColorStateList.valueOf(
-                ContextCompat.getColor(context, R.color.black)
-            )
-            binding.textMusicArtist.setTextColor(defaultColor)
-            binding.textMusicAlbum.setTextColor(defaultColor)
-            binding.textMusicDuration.setTextColor(defaultColor)
+            if(context != null) {
+                val defaultColor = ContextCompat.getColor(context, R.color.on_surface)
+                binding.textMusicTitle.setTextColor(defaultColor)
+                binding.ivMusic.imageTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(context, R.color.black)
+                )
+                binding.textMusicArtist.setTextColor(defaultColor)
+                binding.textMusicAlbum.setTextColor(defaultColor)
+                binding.textMusicDuration.setTextColor(defaultColor)
+            }
         }
 
         private fun setPlayingMusicColors() {
-            val playingColor = ContextCompat.getColor(context, R.color.primary)
-            binding.textMusicTitle.setTextColor(playingColor)
-            binding.ivMusic.imageTintList = ColorStateList.valueOf(playingColor)
-            binding.textMusicArtist.setTextColor(playingColor)
-            binding.textMusicAlbum.setTextColor(playingColor)
-            binding.textMusicDuration.setTextColor(playingColor)
+            if(context != null) {
+                val playingColor = ContextCompat.getColor(context, R.color.primary)
+                binding.textMusicTitle.setTextColor(playingColor)
+                binding.ivMusic.imageTintList = ColorStateList.valueOf(playingColor)
+                binding.textMusicArtist.setTextColor(playingColor)
+                binding.textMusicAlbum.setTextColor(playingColor)
+                binding.textMusicDuration.setTextColor(playingColor)
+            }
         }
     }
 
