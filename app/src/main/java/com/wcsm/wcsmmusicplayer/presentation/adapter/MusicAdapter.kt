@@ -78,6 +78,15 @@ class MusicAdapter(
         }
     }
 
+    fun resetMusicsChecksAndListOfMusicToBeAdd() {
+        val resetSongs = musicsList.map {
+            if(it.isCheckedToAddToPlaylist) it.copy(isCheckedToAddToPlaylist = false)
+            else it
+        }
+        updateMusicsList(resetSongs)
+        musicsToBeAddedToPlaylist.clear()
+    }
+
     fun setMusicStopped(music: Music?) {
         if(music != null) {
             val stoppedMusic = musicsList.indexOf(music)
@@ -95,6 +104,7 @@ class MusicAdapter(
     ) : ViewHolder(binding.root) {
         fun bind(music: Music) {
             if(isSelectedPlaylistModal) {
+                Log.i("#-# TESTE #-#", "isSelectedPlaylistModal: $isSelectedPlaylistModal")
                 music.isCheckedToAddToPlaylist = false
             }
 

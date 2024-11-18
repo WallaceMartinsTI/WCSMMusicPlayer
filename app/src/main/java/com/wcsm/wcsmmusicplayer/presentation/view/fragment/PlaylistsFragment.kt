@@ -31,6 +31,7 @@ class PlaylistsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var musicAdapter: MusicAdapter
+    private lateinit var playlistMusicAdapter: MusicAdapter
     private lateinit var playlistAdapter: PlaylistAdapter
 
     private val musicsViewModel by activityViewModels<MusicsViewModel>()
@@ -44,6 +45,10 @@ class PlaylistsFragment : Fragment() {
     ): View {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
 
+        musicAdapter = MusicAdapter(this) { music ->
+            musicAdapter.checkMusicToBeAddToPlaylist(music)
+        }
+
         playlistAdapter = PlaylistAdapter(
             onEdit = { playlist ->
                 showCreatePlaylistModal(editingPlaylist = true, playlist = playlist) // Open modal to edit playlist
@@ -53,12 +58,8 @@ class PlaylistsFragment : Fragment() {
                 playlistsViewModel.deletePlaylist(playlist)
             },
         ) { playlist ->
-            /* onClick */
-            //val intent = Intent(requireContext(), SelectedPlaylistActivity::class.java)
-            //intent.putExtra("playlist", playlist)
-            //startActivity(intent)
-            musicAdapter.isSelectedPlaylistModal = true
             showPlaylistSelectedModal(playlist)
+            playlistMusicAdapter.isSelectedPlaylistModal = true
         }
 
         playlistsViewModel.getPlaylists()
@@ -90,10 +91,6 @@ class PlaylistsFragment : Fragment() {
 
         binding.fabCreatePlaylist.setOnClickListener {
             showCreatePlaylistModal(editingPlaylist = false, playlist = null)
-        }
-
-        musicAdapter = MusicAdapter(this) { music ->
-            musicAdapter.checkMusicToBeAddToPlaylist(music)
         }
 
         musicsViewModel.musics.observe(viewLifecycleOwner) { musics ->
@@ -130,8 +127,6 @@ class PlaylistsFragment : Fragment() {
     }
 
     private fun showPlaylistSelectedModal(playlist: Playlist) {
-        Log.i("#-# TESTE #-#", "showPlaylistSelectedModal - playlist: $playlist")
-        Log.i("#-# TESTE #-#", "showPlaylistSelectedModal - playlist.musics: ${playlist.musics}")
         val binding = PlaylistModalBinding.inflate(LayoutInflater.from(context))
 
         val dialog = AlertDialog.Builder(requireContext())
@@ -140,20 +135,24 @@ class PlaylistsFragment : Fragment() {
 
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
-        binding.rvPlaylistSelected.adapter = musicAdapter
+        playlistMusicAdapter = MusicAdapter(this) { music ->
+            Log.i("#-# TESTE #-#", "clicou na música no modal da playlist - music: $music")
+        }
+
+        binding.rvPlaylistSelected.adapter = playlistMusicAdapter
         binding.rvPlaylistSelected.layoutManager = LinearLayoutManager(context)
         binding.rvPlaylistSelected.addItemDecoration(
             DividerItemDecoration(context, RecyclerView.VERTICAL)
         )
 
-        musicAdapter.updateMusicsList(playlist.musics)
+        playlistMusicAdapter.updateMusicsList(playlist.musics)
 
         binding.fabPlaylistSelectedExit.setOnClickListener {
             dialog.dismiss()
         }
 
         dialog.setOnDismissListener {
-            musicAdapter.isSelectedPlaylistModal = false
+            playlistMusicAdapter.isSelectedPlaylistModal = false
         }
 
         dialog.show()
@@ -236,6 +235,7 @@ class PlaylistsFragment : Fragment() {
         }
 
         dialog.setOnDismissListener {
+            musicAdapter.resetMusicsChecksAndListOfMusicToBeAdd()
             playlistsViewModel.resetCrudActionResponse()
         }
 
