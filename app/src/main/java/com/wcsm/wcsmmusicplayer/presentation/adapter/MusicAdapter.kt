@@ -26,6 +26,8 @@ class MusicAdapter(
     private var musicsList = emptyList<Music>()
     private var musicsToBeAddedToPlaylist = mutableListOf<Music>()
 
+    private var musicsToCheck = emptyList<Music>()
+
     private var currentPlayingSong: Music? = null
     private var musicStopped: Boolean? = null
 
@@ -36,6 +38,23 @@ class MusicAdapter(
     @SuppressLint("NotifyDataSetChanged")
     fun updateMusicsList(musicList: List<Music>) {
         musicsList = musicList
+        notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateMusicsToCheck(musics: List<Music>) {
+        musicsToCheck = musics
+
+        val titles = musicsToCheck.map { it.title }
+        musicsList = musicsList.map {
+            if(it.title in titles) {
+                Log.i("#-# TESTE #-#", "TITLE IN TITLES - it: $it")
+                it.copy(isCheckedToAddToPlaylist = true)
+            } else {
+                it
+            }
+        }
+
         notifyDataSetChanged()
     }
 
@@ -57,6 +76,13 @@ class MusicAdapter(
     }
 
     fun getNewPlaylistMusics() : List<Music> {
+        musicsList.forEach {
+            if(it.isCheckedToAddToPlaylist) {
+                if(it !in musicsToBeAddedToPlaylist) {
+                    musicsToBeAddedToPlaylist.add(it)
+                }
+            }
+        }
         return musicsToBeAddedToPlaylist.toList()
     }
 
@@ -103,6 +129,9 @@ class MusicAdapter(
         private val binding: MusicItemBinding
     ) : ViewHolder(binding.root) {
         fun bind(music: Music) {
+            Log.i("#-# TESTE #-#", "Chamou BIND")
+            Log.i("#-# TESTE #-#", "music: $music")
+
             if(isSelectedPlaylistModal) {
                 Log.i("#-# TESTE #-#", "isSelectedPlaylistModal: $isSelectedPlaylistModal")
                 music.isCheckedToAddToPlaylist = false
@@ -124,10 +153,13 @@ class MusicAdapter(
             }
 
             if(fragment is PlaylistsFragment) {
+                Log.i("#-# TESTE #-#", "ENTROU: fragment is PlaylistsFragment")
                 if(music.isCheckedToAddToPlaylist) {
+                    Log.i("#-# TESTE #-#", "SETAR COR DAS MUSICAS")
                     setPlayingMusicColors()
                 } else {
                     setDefaultColors()
+                    Log.i("#-# TESTE #-#", "RESET COR DAS MUSICAS")
                 }
             }
 

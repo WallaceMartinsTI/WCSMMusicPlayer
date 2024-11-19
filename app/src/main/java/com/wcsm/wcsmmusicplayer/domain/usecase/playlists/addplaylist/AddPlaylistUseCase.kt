@@ -13,6 +13,8 @@ class AddPlaylistUseCase @Inject constructor(
     private val tag = "# AddPlaylistUseCase #"
 
     override suspend fun invoke(playlist: Playlist) : PlaylistResult {
+        var isUpdate = false
+
         val validationResult = validatePlaylistTitle(playlist.title)
 
         if(validationResult is PlaylistResult.Error) {
@@ -27,9 +29,19 @@ class AddPlaylistUseCase @Inject constructor(
         }
 
         return try {
-            playlistRepository.saveNewPlaylist(playlist)
-            Log.i(tag, "Playlist saved successfully!")
-            PlaylistResult.Success("Playlist criada com sucesso!")
+            val existingPlaylist = playlistRepository.getAllPlaylistsFromData()
+                .find { it.uid == playlist.uid }
+
+            val playlistToSave = if(existingPlaylist != null) {
+                isUpdate = true
+                playlist.copy(uid = existingPlaylist.uid)
+            } else {
+                playlist
+            }
+            playlistRepository.saveNewPlaylist(playlistToSave)
+            val message = if(isUpdate) "Playlist atualizada com sucesso!" else "Playlist criada com sucesso!"
+            Log.i(tag, "message: $message")
+            PlaylistResult.Success(message)
         } catch (e: Exception) {
             Log.e(tag, "Error saving playlist")
             PlaylistResult.Error(

@@ -38,6 +38,8 @@ class PlaylistsFragment : Fragment() {
 
     private val playlistsViewModel by activityViewModels<PlaylistsViewModel>()
 
+    private var toastAlreadyShown = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -73,6 +75,10 @@ class PlaylistsFragment : Fragment() {
                     handleNoPlaylistViews(false)
                 }
             }
+        }
+
+        playlistsViewModel.responseToastAlreadyShown.observe(viewLifecycleOwner) { responseAlreadyShown ->
+            toastAlreadyShown = responseAlreadyShown
         }
 
         playlistsViewModel.playlistDeleted.observe(viewLifecycleOwner) { playlistDeleted ->
@@ -159,11 +165,15 @@ class PlaylistsFragment : Fragment() {
     }
 
     private fun showCreatePlaylistModal(editingPlaylist: Boolean, playlist: Playlist?) {
+        val isEditingModal = editingPlaylist && playlist != null
+
         val binding = CreatePlaylistModalBinding.inflate(LayoutInflater.from(context))
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(binding.root)
             .create()
+
+
 
         binding.rvMusicsToAddToPlaylist.adapter = musicAdapter
         binding.rvMusicsToAddToPlaylist.layoutManager = LinearLayoutManager(context)
@@ -173,8 +183,17 @@ class PlaylistsFragment : Fragment() {
 
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
-        if(editingPlaylist && playlist != null) {
+        if(isEditingModal) {
+            Log.i("#-# TESTE #-#", "isEditingModal")
+            playlist!!.musics.forEach {
+                Log.i("#-# TESTE #-#", "music: $it")
+            }
+            val existingMusic = playlist!!.musics.map {
+                it.copy(isCheckedToAddToPlaylist = true)
+            }
             binding.modalPlaylistName.setText(playlist.title)
+
+            musicAdapter.updateMusicsToCheck(existingMusic)
         }
 
         binding.fabSaveNewPlaylist.setOnClickListener {
@@ -185,7 +204,11 @@ class PlaylistsFragment : Fragment() {
             val musicsList = musicAdapter.getNewPlaylistMusics()
             val playlistName = binding.modalPlaylistName.text.toString()
 
-            val newPlaylist = Playlist(title = playlistName, musics =  musicsList)
+            val newPlaylist = if(editingPlaylist && playlist != null) {
+                playlist.copy(title = playlistName, musics = musicsList)
+            } else {
+                Playlist(title = playlistName, musics =  musicsList)
+            }
 
             playlistsViewModel.savePlaylist(newPlaylist)
         }
@@ -235,6 +258,7 @@ class PlaylistsFragment : Fragment() {
         }
 
         dialog.setOnDismissListener {
+            //if(isEditingModal) musicAdapter.updateMusicsToCheck(emptyList())
             musicAdapter.resetMusicsChecksAndListOfMusicToBeAdd()
             playlistsViewModel.resetCrudActionResponse()
         }
@@ -243,7 +267,10 @@ class PlaylistsFragment : Fragment() {
     }
 
     private fun showToastMessage(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        if(!toastAlreadyShown) {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            playlistsViewModel.updateResponseToastAlreadyShown(true)
+        }
     }
 
     override fun onDestroyView() {

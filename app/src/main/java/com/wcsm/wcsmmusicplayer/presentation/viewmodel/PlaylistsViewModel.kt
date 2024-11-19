@@ -32,6 +32,8 @@ class PlaylistsViewModel @Inject constructor(
     private val _playlistDeleted = MutableLiveData(Pair(false, ""))
     val playlistDeleted: LiveData<Pair<Boolean, String>> get() = _playlistDeleted
 
+    private val _responseToastAlreadyShown = MutableLiveData(false)
+    val responseToastAlreadyShown: LiveData<Boolean> get() = _responseToastAlreadyShown
 
     fun getPlaylists() {
         viewModelScope.launch {
@@ -42,11 +44,15 @@ class PlaylistsViewModel @Inject constructor(
             } catch (e: Exception) {
                 Log.e(tag, "Error fetching playlists", e)
             }
-
         }
     }
 
+    fun updateResponseToastAlreadyShown(status: Boolean) {
+        _responseToastAlreadyShown.value = status
+    }
+
     fun savePlaylist(playlist: Playlist) {
+        _responseToastAlreadyShown.value = false
         viewModelScope.launch {
             val result = addPlaylistUseCase(playlist)
             _crudActionResponse.postValue(result)
@@ -66,6 +72,7 @@ class PlaylistsViewModel @Inject constructor(
     }
 
     fun deletePlaylist(playlist: Playlist) {
+        _responseToastAlreadyShown.value = false
         viewModelScope.launch {
             val result = deletePlaylistUseCase(playlist)
             _crudActionResponse.postValue(result)
