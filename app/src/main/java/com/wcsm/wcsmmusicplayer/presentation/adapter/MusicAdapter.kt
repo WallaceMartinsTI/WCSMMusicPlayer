@@ -48,7 +48,6 @@ class MusicAdapter(
         val titles = musicsToCheck.map { it.title }
         musicsList = musicsList.map {
             if(it.title in titles) {
-                Log.i("#-# TESTE #-#", "TITLE IN TITLES - it: $it")
                 it.copy(isCheckedToAddToPlaylist = true)
             } else {
                 it
@@ -129,9 +128,6 @@ class MusicAdapter(
         private val binding: MusicItemBinding
     ) : ViewHolder(binding.root) {
         fun bind(music: Music) {
-            Log.i("#-# TESTE #-#", "Chamou BIND")
-            Log.i("#-# TESTE #-#", "music: $music")
-
             if(isSelectedPlaylistModal) {
                 Log.i("#-# TESTE #-#", "isSelectedPlaylistModal: $isSelectedPlaylistModal")
                 music.isCheckedToAddToPlaylist = false
@@ -153,13 +149,10 @@ class MusicAdapter(
             }
 
             if(fragment is PlaylistsFragment) {
-                Log.i("#-# TESTE #-#", "ENTROU: fragment is PlaylistsFragment")
                 if(music.isCheckedToAddToPlaylist) {
-                    Log.i("#-# TESTE #-#", "SETAR COR DAS MUSICAS")
                     setPlayingMusicColors()
                 } else {
                     setDefaultColors()
-                    Log.i("#-# TESTE #-#", "RESET COR DAS MUSICAS")
                 }
             }
 

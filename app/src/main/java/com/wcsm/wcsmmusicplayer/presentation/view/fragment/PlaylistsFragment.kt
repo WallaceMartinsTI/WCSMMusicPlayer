@@ -53,7 +53,7 @@ class PlaylistsFragment : Fragment() {
 
         playlistAdapter = PlaylistAdapter(
             onEdit = { playlist ->
-                showCreatePlaylistModal(editingPlaylist = true, playlist = playlist) // Open modal to edit playlist
+                showCreatePlaylistModal(editingPlaylist = true, playlist = playlist)
             },
             onDelete = { playlist ->
                 playlistsViewModel.updatePlaylistDeleted(false, "")
@@ -173,8 +173,6 @@ class PlaylistsFragment : Fragment() {
             .setView(binding.root)
             .create()
 
-
-
         binding.rvMusicsToAddToPlaylist.adapter = musicAdapter
         binding.rvMusicsToAddToPlaylist.layoutManager = LinearLayoutManager(context)
         binding.rvMusicsToAddToPlaylist.addItemDecoration(
@@ -184,10 +182,6 @@ class PlaylistsFragment : Fragment() {
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         if(isEditingModal) {
-            Log.i("#-# TESTE #-#", "isEditingModal")
-            playlist!!.musics.forEach {
-                Log.i("#-# TESTE #-#", "music: $it")
-            }
             val existingMusic = playlist!!.musics.map {
                 it.copy(isCheckedToAddToPlaylist = true)
             }
@@ -258,7 +252,6 @@ class PlaylistsFragment : Fragment() {
         }
 
         dialog.setOnDismissListener {
-            //if(isEditingModal) musicAdapter.updateMusicsToCheck(emptyList())
             musicAdapter.resetMusicsChecksAndListOfMusicToBeAdd()
             playlistsViewModel.resetCrudActionResponse()
         }
