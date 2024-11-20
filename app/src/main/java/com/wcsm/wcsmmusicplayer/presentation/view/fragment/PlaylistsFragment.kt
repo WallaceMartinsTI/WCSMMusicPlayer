@@ -142,6 +142,10 @@ class PlaylistsFragment : Fragment() {
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         playlistMusicAdapter = MusicAdapter(this) { music ->
+            musicsViewModel.setIsMusicFromPlaylist(true)
+            musicsViewModel.setPlaylistMusics(playlist.musics)
+            musicsViewModel.setPlaylistCurrentSong(music)
+            musicsViewModel.startMusic(requireContext(), music)
             Log.i("#-# TESTE #-#", "clicou na música no modal da playlist - music: $music")
         }
 
@@ -267,7 +271,9 @@ class PlaylistsFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        Log.i("#-# TESTE #-#", "onDestroyView")
         super.onDestroyView()
+        musicsViewModel.setIsMusicFromPlaylist(false)
         _binding = null
     }
 

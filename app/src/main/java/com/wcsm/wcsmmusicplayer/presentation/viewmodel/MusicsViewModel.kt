@@ -43,6 +43,27 @@ class MusicsViewModel @Inject constructor(
     private val _musicEnded = MutableLiveData<Boolean>()
     val musicEnded: LiveData<Boolean> get() = _musicEnded
 
+    private val _isMusicsFromPlaylist = MutableLiveData(false)
+    val isMusicsFromPlaylist: LiveData<Boolean> get() = _isMusicsFromPlaylist
+
+    private val _playlistMusics = MutableLiveData<List<Music>>()
+    val playlistMusics: LiveData<List<Music>>get() = _playlistMusics
+
+    private val _playlistCurrentSong = MutableLiveData<Music>()
+    val playlistCurrentSong: LiveData<Music> get() = _playlistCurrentSong
+
+    fun setIsMusicFromPlaylist(isFromPlaylist: Boolean) {
+        _isMusicsFromPlaylist.value = isFromPlaylist
+    }
+
+    fun setPlaylistMusics(musics: List<Music>) {
+        _playlistMusics.value = musics
+    }
+
+    fun setPlaylistCurrentSong(song: Music) {
+        _playlistCurrentSong.value = song
+    }
+
     fun getMusics() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -84,8 +105,6 @@ class MusicsViewModel @Inject constructor(
                 seekPlayingMusicTo(playingMusicCurrentPosition())
                 _musicPaused.value = false
                 mediaPlayer?.start()
-
-                println("#-# TESTE #-# => mediaPlayer.isPlaying: ${mediaPlayer?.isPlaying}")
             }
         }
     }
@@ -126,8 +145,8 @@ class MusicsViewModel @Inject constructor(
     }
 
     private fun getPreviousMusic(context: Context) {
-        val musicsList = musics.value
-        val currentMusic = playingSong.value
+        val musicsList = if(isMusicsFromPlaylist.value == true) playlistMusics.value else musics.value
+        val currentMusic = if(isMusicsFromPlaylist.value == true) playlistCurrentSong.value else playingSong.value
         if(musicsList != null && currentMusic != null) {
             val result = getPreviousMusicUseCase(musicsList, currentMusic)
 
@@ -147,8 +166,9 @@ class MusicsViewModel @Inject constructor(
     }
 
     private fun getNextMusic(context: Context) {
-        val musicsList = musics.value
-        val currentMusic = playingSong.value
+        val musicsList = if(isMusicsFromPlaylist.value == true) playlistMusics.value else musics.value
+        val currentMusic = if(isMusicsFromPlaylist.value == true) playlistCurrentSong.value else playingSong.value
+
         if(musicsList != null && currentMusic != null) {
             val result = getNextMusicUseCase(musicsList, currentMusic)
 
