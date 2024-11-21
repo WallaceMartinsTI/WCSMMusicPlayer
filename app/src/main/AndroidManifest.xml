@@ -6,6 +6,9 @@
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_REMOTE_MESSAGING" />
 
     <application
         android:name=".BaseApplication"
@@ -19,9 +22,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WCSMMusicPlayer"
         tools:targetApi="31">
-        <activity
-            android:name=".presentation.view.activity.SelectedPlaylistActivity"
-            android:exported="false" />
+        <service
+            android:name=".presentation.service.PlayingMusicService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="remoteMessaging" />
+
         <activity
             android:name=".presentation.view.activity.WelcomeActivity"
             android:exported="false" />

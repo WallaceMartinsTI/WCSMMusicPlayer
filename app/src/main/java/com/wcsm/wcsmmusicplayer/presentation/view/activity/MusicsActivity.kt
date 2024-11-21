@@ -103,6 +103,7 @@ class MusicsActivity : AppCompatActivity() {
                     }
                 }
 
+                musicsViewModel.stopPlayingSongNotification(this)
                 musicsViewModel.resetMusicEndedFlag()
             }
         }
@@ -270,6 +271,7 @@ class MusicsActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        musicsViewModel.stopAll(this)
         updateTimeRunnable?.let { handler.removeCallbacks(it) }
     }
 }

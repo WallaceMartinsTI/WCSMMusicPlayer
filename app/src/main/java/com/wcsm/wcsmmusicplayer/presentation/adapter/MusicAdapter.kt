@@ -33,7 +33,11 @@ class MusicAdapter(
 
     private val context = fragment?.requireContext()
 
+    var currentPlaylistSong: Music? = null
+
     var isSelectedPlaylistModal = false
+
+    var lastMusicSelected: Music? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateMusicsList(musicList: List<Music>) {
@@ -128,8 +132,8 @@ class MusicAdapter(
         private val binding: MusicItemBinding
     ) : ViewHolder(binding.root) {
         fun bind(music: Music) {
+
             if(isSelectedPlaylistModal) {
-                Log.i("#-# TESTE #-#", "isSelectedPlaylistModal: $isSelectedPlaylistModal")
                 music.isCheckedToAddToPlaylist = false
             }
 
@@ -139,6 +143,17 @@ class MusicAdapter(
             binding.textMusicDuration.text = formatDurationIntToString(music.duration)
 
             binding.clMusicItem.setOnClickListener {
+                lastMusicSelected?.let { lastMusic ->
+                    val previousIndex = musicsList.indexOf(lastMusic)
+                    if(previousIndex != -1) {
+                        lastMusic.isCheckedToAddToPlaylist = false
+                        notifyItemChanged(previousIndex)
+                    }
+                }
+
+                lastMusicSelected = music
+                music.isCheckedToAddToPlaylist = true
+                setPlayingMusicColors()
                 onClick(music)
             }
 
@@ -158,6 +173,10 @@ class MusicAdapter(
 
             if(musicStopped != null && musicStopped == true) {
                 setDefaultColors()
+            }
+
+            if(music == currentPlaylistSong) {
+                setPlayingMusicColors()
             }
         }
 

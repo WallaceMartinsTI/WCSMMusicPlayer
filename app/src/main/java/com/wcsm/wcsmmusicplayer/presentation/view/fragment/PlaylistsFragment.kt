@@ -18,6 +18,7 @@ import com.wcsm.wcsmmusicplayer.R
 import com.wcsm.wcsmmusicplayer.databinding.CreatePlaylistModalBinding
 import com.wcsm.wcsmmusicplayer.databinding.FragmentPlaylistsBinding
 import com.wcsm.wcsmmusicplayer.databinding.PlaylistModalBinding
+import com.wcsm.wcsmmusicplayer.domain.model.Music
 import com.wcsm.wcsmmusicplayer.domain.model.Playlist
 import com.wcsm.wcsmmusicplayer.domain.usecase.PlaylistResult
 import com.wcsm.wcsmmusicplayer.presentation.adapter.MusicAdapter
@@ -39,6 +40,8 @@ class PlaylistsFragment : Fragment() {
     private val playlistsViewModel by activityViewModels<PlaylistsViewModel>()
 
     private var toastAlreadyShown = false
+    var lastMusic: Music? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,6 +64,7 @@ class PlaylistsFragment : Fragment() {
             },
         ) { playlist ->
             showPlaylistSelectedModal(playlist)
+
             playlistMusicAdapter.isSelectedPlaylistModal = true
         }
 
@@ -135,6 +139,7 @@ class PlaylistsFragment : Fragment() {
     private fun showPlaylistSelectedModal(playlist: Playlist) {
         val binding = PlaylistModalBinding.inflate(LayoutInflater.from(context))
 
+
         val dialog = AlertDialog.Builder(requireContext())
             .setView(binding.root)
             .create()
@@ -142,12 +147,19 @@ class PlaylistsFragment : Fragment() {
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         playlistMusicAdapter = MusicAdapter(this) { music ->
+            lastMusic = music
             musicsViewModel.setIsMusicFromPlaylist(true)
             musicsViewModel.setPlaylistMusics(playlist.musics)
             musicsViewModel.setPlaylistCurrentSong(music)
             musicsViewModel.startMusic(requireContext(), music)
-            Log.i("#-# TESTE #-#", "clicou na música no modal da playlist - music: $music")
+            music.isCheckedToAddToPlaylist = true
         }
+
+        playlistMusicAdapter.lastMusicSelected = lastMusic
+
+        Log.i("#-# TESTE #-#", "ANTES playlistMusicAdapter.currentPlaylistSong: ${playlistMusicAdapter.currentPlaylistSong} ")
+        playlistMusicAdapter.currentPlaylistSong = musicsViewModel.playlistCurrentSong.value
+        Log.i("#-# TESTE #-#", "DEPOIS playlistMusicAdapter.currentPlaylistSong: ${playlistMusicAdapter.currentPlaylistSong}")
 
         binding.rvPlaylistSelected.adapter = playlistMusicAdapter
         binding.rvPlaylistSelected.layoutManager = LinearLayoutManager(context)
@@ -162,6 +174,7 @@ class PlaylistsFragment : Fragment() {
         }
 
         dialog.setOnDismissListener {
+            playlistMusicAdapter.lastMusicSelected = lastMusic
             playlistMusicAdapter.isSelectedPlaylistModal = false
         }
 
@@ -271,9 +284,7 @@ class PlaylistsFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        Log.i("#-# TESTE #-#", "onDestroyView")
         super.onDestroyView()
-        musicsViewModel.setIsMusicFromPlaylist(false)
         _binding = null
     }
 

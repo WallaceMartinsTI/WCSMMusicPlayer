@@ -1,6 +1,7 @@
 package com.wcsm.wcsmmusicplayer.presentation.viewmodel
 
 import android.content.Context
+import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.util.Log
@@ -14,6 +15,7 @@ import com.wcsm.wcsmmusicplayer.domain.usecase.MusicError
 import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getmusics.IGetMusicsUseCase
 import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getnextmusic.IGetNextMusicUseCase
 import com.wcsm.wcsmmusicplayer.domain.usecase.musics.getpreviousmusic.IGetPreviousMusicUseCase
+import com.wcsm.wcsmmusicplayer.presentation.service.PlayingMusicService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,6 +54,8 @@ class MusicsViewModel @Inject constructor(
     private val _playlistCurrentSong = MutableLiveData<Music>()
     val playlistCurrentSong: LiveData<Music> get() = _playlistCurrentSong
 
+    private var playingMusicService: Intent? = null
+
     fun setIsMusicFromPlaylist(isFromPlaylist: Boolean) {
         _isMusicsFromPlaylist.value = isFromPlaylist
     }
@@ -61,6 +65,7 @@ class MusicsViewModel @Inject constructor(
     }
 
     fun setPlaylistCurrentSong(song: Music) {
+        Log.i("# MusicsViewModel - getMusics #", "MusicsViewModel - setPlaylistCurrentSong")
         _playlistCurrentSong.value = song
     }
 
@@ -89,7 +94,23 @@ class MusicsViewModel @Inject constructor(
         _playingSong.value = music
         _musicPaused.value = false
         _stoppedSong.value = null
+
+        if(isMusicsFromPlaylist.value == true) {
+            setPlaylistCurrentSong(music)
+        }
+
+        playingMusicService = Intent(context, PlayingMusicService::class.java)
+        val intent = playingMusicService
+        if (intent != null) {
+            intent.putExtra("musicTitle", music.title)
+            intent.putExtra("musicArtist", music.artist)
+            context.startService(intent)
+        }
         mediaPlayer?.start()
+    }
+
+    fun stopPlayingSongNotification(context: Context) {
+        playingMusicService.let { context.stopService(playingMusicService) }
     }
 
     fun playOrPause(context: Context) {
@@ -120,6 +141,10 @@ class MusicsViewModel @Inject constructor(
     }
 
     fun stopMusic() {
+        if(isMusicsFromPlaylist.value == true) {
+            _isMusicsFromPlaylist.value = false
+        }
+
         stopPlayingMusic()
     }
 
@@ -135,6 +160,11 @@ class MusicsViewModel @Inject constructor(
         _musicEnded.value = false
     }
 
+    fun stopAll(context: Context) {
+        stopPlayingSongNotification(context)
+        stopPlayingMusic()
+    }
+
     private fun initMediaPlayer(context: Context, uriString: String) {
         val uri = Uri.parse(uriString)
         mediaPlayer = MediaPlayer.create(context, uri).apply {
@@ -145,8 +175,12 @@ class MusicsViewModel @Inject constructor(
     }
 
     private fun getPreviousMusic(context: Context) {
-        val musicsList = if(isMusicsFromPlaylist.value == true) playlistMusics.value else musics.value
-        val currentMusic = if(isMusicsFromPlaylist.value == true) playlistCurrentSong.value else playingSong.value
+        val musicsList = if(isMusicsFromPlaylist.value == true) playlistMusics.value
+        else musics.value
+
+        val currentMusic = if(isMusicsFromPlaylist.value == true) playlistCurrentSong.value
+        else playingSong.value
+
         if(musicsList != null && currentMusic != null) {
             val result = getPreviousMusicUseCase(musicsList, currentMusic)
 
@@ -155,6 +189,7 @@ class MusicsViewModel @Inject constructor(
                     val previousMusic = result.getOrNull()
                     if(previousMusic != null) {
                         startMusic(context, previousMusic)
+                        setPlaylistCurrentSong(previousMusic)
                     }
                 }
                 result.isFailure -> {
@@ -166,8 +201,11 @@ class MusicsViewModel @Inject constructor(
     }
 
     private fun getNextMusic(context: Context) {
-        val musicsList = if(isMusicsFromPlaylist.value == true) playlistMusics.value else musics.value
-        val currentMusic = if(isMusicsFromPlaylist.value == true) playlistCurrentSong.value else playingSong.value
+        val musicsList = if(isMusicsFromPlaylist.value == true) playlistMusics.value
+        else musics.value
+
+        val currentMusic = if(isMusicsFromPlaylist.value == true) playlistCurrentSong.value
+        else playingSong.value
 
         if(musicsList != null && currentMusic != null) {
             val result = getNextMusicUseCase(musicsList, currentMusic)
@@ -177,6 +215,7 @@ class MusicsViewModel @Inject constructor(
                     val nextMusic = result.getOrNull()
                     if(nextMusic != null) {
                         startMusic(context, nextMusic)
+                        setPlaylistCurrentSong(nextMusic)
                     }
                 }
                 result.isFailure -> {
