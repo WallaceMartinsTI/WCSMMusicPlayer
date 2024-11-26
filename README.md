@@ -28,7 +28,7 @@ The WCSM Music Player is an Android application designed to provide a complete m
 
 <div align="center">
 
-[▶️ Clique aqui]() to watch the full demonstrating video on YouTube.
+[▶️ Click here](https://www.youtube.com/shorts/7P0CfRn-X9w) to watch the full demonstrating video on YouTube.
 
 </div>
 
