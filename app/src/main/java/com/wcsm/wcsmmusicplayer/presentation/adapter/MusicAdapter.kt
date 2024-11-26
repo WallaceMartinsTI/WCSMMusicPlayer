@@ -143,18 +143,21 @@ class MusicAdapter(
             binding.textMusicDuration.text = formatDurationIntToString(music.duration)
 
             binding.clMusicItem.setOnClickListener {
-                lastMusicSelected?.let { lastMusic ->
-                    val previousIndex = musicsList.indexOf(lastMusic)
-                    if(previousIndex != -1) {
-                        lastMusic.isCheckedToAddToPlaylist = false
-                        notifyItemChanged(previousIndex)
+                if(isSelectedPlaylistModal) {
+                    lastMusicSelected?.let { lastMusic ->
+                        val previousIndex = musicsList.indexOf(lastMusic)
+                        if(previousIndex != -1) {
+                            lastMusic.isCheckedToAddToPlaylist = false
+                            notifyItemChanged(previousIndex)
+                        }
                     }
-                }
 
-                lastMusicSelected = music
-                music.isCheckedToAddToPlaylist = true
-                setPlayingMusicColors()
-                onClick(music)
+                    lastMusicSelected = music
+                    music.isCheckedToAddToPlaylist = true
+                    setPlayingMusicColors()
+                } else {
+                    onClick(music)
+                }
             }
 
             setDefaultColors()
