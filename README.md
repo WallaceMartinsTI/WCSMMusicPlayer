@@ -1,4 +1,4 @@
-Don't speak Portuguese? Clique here to view this page in English.
+Não fala inglês? [Clique aqui](./README-pt.md) para ver essa página em Português.
 
 <h1 align="center">
   <p align="center">WCSM Music Player</p>
